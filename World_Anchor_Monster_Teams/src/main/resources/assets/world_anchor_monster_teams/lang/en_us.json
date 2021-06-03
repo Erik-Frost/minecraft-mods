@@ -1,0 +1,6 @@
+{
+  "chat.feedback.command.display_team_name_tags.true": "Team name tags are now being displayed.",
+  "chat.feedback.command.display_team_name_tags.false": "Team name tags are now being hidden.",
+
+  "chat.feedback.command.teams.added_player_to_default_team": "World Anchor's Teams Extended Mod: Added player to default team since it was their first login!"
+}

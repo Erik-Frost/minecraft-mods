@@ -1,0 +1,42 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.worldanchor.monsterteams.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "DamageTrackerMixin",
+    "EntityMixin",
+    "FireworkRocketEntityMixin",
+    "GoalSelectorAccessor",
+    "HorseBaseEntityMixin",
+    "HostileEntityMixin",
+    "LivingEntityMixin",
+    "MobEntityAccessor",
+    "MobEntityMixin",
+    "MobSpawnerLogicAccessor",
+    "PigEntityMixin",
+    "PlayerManagerMixin",
+    "ProjectileEntityMixin",
+    "RevengeGoalMixin",
+    "ServerScoreboardMixin",
+    "ServerWorldMixin",
+    "SkeletonHorseTrapTriggerGoalMixin",
+    "SlimeEntityAccessor",
+    "SlimeEntityMixin",
+    "SpawnEggItemMixin",
+    "SpawnHelperAccessor",
+    "SpawnHelperMixin",
+    "TameableEntityMixin",
+    "TrackTargetGoalMixin",
+    "VexEntityMixin",
+    "VillagerEntityMixin",
+    "ZombieEntityMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "world_anchor_patches",
+  "version": "${version}",
+  "name": "World Anchor Patches",
+  "description": "A mod that patches any issues World Anchor finds with Minecraft.",
+  "license": "All rights reserved.",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "com.worldanchor.patches.ExampleMod"
+    ]
+  },
+  "mixins": [
+    "world_anchor_patches.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  }
+}
