@@ -1,7 +1,7 @@
 package com.worldanchor.monsterteams.mixin;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.scoreboard.AbstractTeam;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,10 +15,10 @@ public abstract class EntityMixin {
 
     @Shadow @Nullable public abstract AbstractTeam getScoreboardTeam();
 
-    @Inject(method = "toTag", at = @At("HEAD"))
-    void injectMethod(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
+    @Inject(method = "writeNbt", at = @At("HEAD"))
+    void injectMethod(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (getScoreboardTeam() != null) {
-            tag.putString("Team", getScoreboardTeam().getName());
+            nbt.putString("Team", getScoreboardTeam().getName());
         }
     }
 }

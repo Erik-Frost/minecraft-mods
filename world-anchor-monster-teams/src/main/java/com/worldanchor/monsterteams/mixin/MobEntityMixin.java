@@ -26,7 +26,7 @@ public abstract class MobEntityMixin {
 
     @Shadow @Final protected GoalSelector targetSelector;
 
-    @Redirect(method = "method_29243", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"))
+    @Redirect(method = "convertTo", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"))
     boolean redirectMethod(World world, Entity entity) {
         if (((MobEntity) (Object) this).getScoreboardTeam() != null) {
             TeamUtil.addToTeamHelper((LivingEntity) entity, ((MobEntity) (Object) this).getScoreboardTeam().getName());
@@ -34,7 +34,7 @@ public abstract class MobEntityMixin {
         return world.spawnEntity(entity);
     }
 
-    @Redirect(method = "method_29506", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/SpawnEggItem;spawnBaby(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/mob/MobEntity;Lnet/minecraft/entity/EntityType;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/item/ItemStack;)Ljava/util/Optional;"))
+    @Redirect(method = "interactWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/SpawnEggItem;spawnBaby(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/mob/MobEntity;Lnet/minecraft/entity/EntityType;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/item/ItemStack;)Ljava/util/Optional;"))
     Optional<MobEntity> redirectMethod(SpawnEggItem spawnEggItem, PlayerEntity user, MobEntity mobEntity, EntityType<? extends MobEntity> entityType, ServerWorld serverWorld, Vec3d vec3d, ItemStack itemStack) {
         Optional<MobEntity> optional = spawnEggItem.spawnBaby(user, mobEntity, entityType, serverWorld, vec3d, itemStack);
         if (optional.isPresent() && optional.get() instanceof LivingEntity && user.getScoreboardTeam() != null) {

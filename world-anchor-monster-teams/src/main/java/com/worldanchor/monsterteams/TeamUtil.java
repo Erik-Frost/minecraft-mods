@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BannerItem;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.scoreboard.Team;
@@ -43,9 +44,9 @@ public class TeamUtil {
         for (PrioritizedGoal prioritizedGoal :
                 ((GoalSelectorAccessor) ((MobEntityAccessor) mobEntity).getTargetSelector()).getGoals()) {
             if (prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal
-                    && (((NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal()).targetEntitySelector
+                    && (((NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal()).livingEntityPredicate
                                 instanceof notOnTeamAndHostileExceptCreeperEntityPredicate
-                    || ((NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal()).targetEntitySelector
+                    || ((NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal()).livingEntityPredicate
                                 instanceof OnTeamEntityPredicate)) {
                 toRemove.add(prioritizedGoal);
             }
@@ -98,7 +99,7 @@ public class TeamUtil {
     public static void displayNameBasedOnGamerule(LivingEntity livingEntity) {
         // Turn on name tag if rule is set to
         livingEntity.setCustomNameVisible(
-                livingEntity.getEntityWorld().getGameRules().getBoolean(Mod.DISPLAY_TEAM_NAME_TAGS));
+                livingEntity.getEntityWorld().getGameRules().getBoolean(Server.DISPLAY_TEAM_NAME_TAGS));
 
     }
 
@@ -174,10 +175,10 @@ public class TeamUtil {
     public static void alertOthersOnTeam(LivingEntity attacked, LivingEntity attacker) {
         double alertHorizontalDistance = 16;
         double alertVerticalDistance = 16;
-        Box box = Box.method_29968(attacked.getPos()).expand(alertHorizontalDistance, alertVerticalDistance,
+        Box box = Box.from(attacked.getPos()).expand(alertHorizontalDistance, alertVerticalDistance,
                 alertHorizontalDistance);
         // Maybe add team predicate
-        List<MobEntity> list = attacked.world.getEntitiesIncludingUngeneratedChunks(MobEntity.class, box);
+        List<MobEntity> list = attacked.world.getEntitiesByClass(MobEntity.class, box, EntityPredicates.VALID_ENTITY);
         Iterator iterator = list.iterator();
 
         MobEntity mobentity;
@@ -190,40 +191,34 @@ public class TeamUtil {
                     && attacker != null && !mobentity.isTeammate(attacker) && attacker.isAlive()) {
                 mobentity.setTarget(attacker);
                 mobentity.setAttacker(attacker);
-                mobentity.world.sendEntityStatus(mobentity, (byte)123);
             }
         }
     }
 
 
     // Predicate filter to target only LivingEntities on a team
-    public static class OnTeamEntityPredicate extends TargetPredicate {
+    public static class OnTeamEntityPredicate implements Predicate<LivingEntity> {
         @Override
-        public boolean test(@Nullable LivingEntity attacker, LivingEntity target) {
+        public boolean test(LivingEntity target) {
             // Target must be on a team to target
-            return target.getScoreboardTeam() != null && super.test(attacker, target);
+            return target.getScoreboardTeam() != null;
         }
     }
 
-    // Predicate filter to target only LivingEntities on a team
-    public static class notOnTeamAndHostileExceptCreeperEntityPredicate extends TargetPredicate {
+    public static class notOnTeamAndHostileExceptCreeperEntityPredicate implements Predicate<LivingEntity> {
         @Override
-        public boolean test(@Nullable LivingEntity attacker, LivingEntity target) {
-            return (target.getScoreboardTeam() == null &&
-                    ((target instanceof HostileEntity && !(target instanceof CreeperEntity))
-                            || target instanceof SlimeEntity))
-                    && super.test(attacker, target);
+        public boolean test(LivingEntity target) {
+            return (!(target instanceof CreeperEntity) && target.getScoreboardTeam() == null &&
+                    (target instanceof HostileEntity || target instanceof SlimeEntity));
         }
     }
 
 
-    public static class OnTeamAndHostileExceptCreeperEntityPredicate extends TargetPredicate {
+    public static class OnTeamAndHostileExceptCreeperEntityPredicate implements Predicate<LivingEntity> {
         @Override
-        public boolean test(@Nullable LivingEntity attacker, LivingEntity target) {
-            return (target.getScoreboardTeam() != null &&
-                    ((target instanceof HostileEntity && !(target instanceof CreeperEntity))
-                            || target instanceof SlimeEntity))
-                    && super.test(attacker, target);
+        public boolean test(LivingEntity target) {
+            return (!(target instanceof CreeperEntity) && target.getScoreboardTeam() != null &&
+                    (target instanceof HostileEntity || target instanceof SlimeEntity));
         }
     }
 
@@ -240,15 +235,17 @@ public class TeamUtil {
         protected LivingEntity nearestTarget;
         /** This filter is applied to the Entity search. Only matching entities will be targeted. */
         public TargetPredicate targetEntitySelector;
+        public Predicate<LivingEntity> livingEntityPredicate;
 
         public NearestAttackableTargetGoal(MobEntity goalOwnerIn, Class<T> targetClassIn,
                                            int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn,
-                                           TargetPredicate targetPredicate) {
+                                           Predicate<LivingEntity> livingEntityPredicateIn) {
             super(goalOwnerIn, checkSight, nearbyOnlyIn);
             targetClass = targetClassIn;
             targetChance = targetChanceIn;
             setControls(EnumSet.of(Goal.Control.TARGET));
-            targetEntitySelector = (targetPredicate).setBaseMaxDistance(getFollowRange());
+            targetEntitySelector = TargetPredicate.DEFAULT.setBaseMaxDistance(getFollowRange());
+            livingEntityPredicate = livingEntityPredicateIn;
         }
 
 
@@ -270,14 +267,10 @@ public class TeamUtil {
         }
 
         protected void findNearestTarget() {
-            if (targetClass != PlayerEntity.class && targetClass != ServerPlayerEntity.class) {
-                nearestTarget = mob.world.getClosestEntity(targetClass, targetEntitySelector, mob, mob.getX(),
-                        mob.getEyeY(), mob.getZ(), getTargetableArea(getFollowRange()));
-            } else {
-                nearestTarget = mob.world.getClosestPlayer(targetEntitySelector, mob, mob.getX(), mob.getEyeY(),
-                        mob.getZ());
-            }
-
+            nearestTarget = mob.world.getClosestEntity(
+                    mob.world.getEntitiesByClass(targetClass, getTargetableArea(getFollowRange()), livingEntityPredicate),
+                    targetEntitySelector, mob, mob.getX(),
+                    mob.getEyeY(), mob.getZ());
         }
 
         /**
@@ -319,7 +312,7 @@ public class TeamUtil {
         public boolean canStart() {
             List<LivingEntity> list = this.mob.world.getEntitiesByClass(LivingEntity.class,
                     this.mob.getBoundingBox().expand(this.maxDistance), this.followTargetPredicate);
-            LivingEntity closestEntity = this.mob.world.getClosestEntity(list, new TargetPredicate(), null,
+            LivingEntity closestEntity = this.mob.world.getClosestEntity(list, TargetPredicate.DEFAULT, null,
                     mob.getX(), mob.getX(), mob.getX());
             if (closestEntity != null) {
                 this.target = closestEntity;

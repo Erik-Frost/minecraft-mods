@@ -55,11 +55,11 @@ public abstract class SpawnEggItemMixin {
                 BlockEntity blockEntity = world.getBlockEntity(blockPos);
                 if (blockEntity instanceof MobSpawnerBlockEntity) {
                     MobSpawnerLogic mobSpawnerLogic = ((MobSpawnerBlockEntity)blockEntity).getLogic();
-                    if (((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityTag().contains("Team")) {
-                        ((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityTag().remove("Team");
+                    if (((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityNbt().contains("Team")) {
+                        ((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityNbt().remove("Team");
                     }
                     if (context.getPlayer() != null && context.getPlayer().getScoreboardTeam() != null) {
-                        ((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityTag().putString("Team", context.getPlayer().getScoreboardTeam().getName());
+                        ((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityNbt().putString("Team", context.getPlayer().getScoreboardTeam().getName());
                     }
 
                     //blockEntity.markDirty();

@@ -4,13 +4,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="delegatedBuild" value="true" />
-        <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/World_Anchor_Monster_Teams" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-monster-teams" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/World_Anchor_Monster_Teams" />
+            <option value="$PROJECT_DIR$/world-anchor-monster-teams" />
           </set>
         </option>
       </GradleProjectSettings>

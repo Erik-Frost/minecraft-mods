@@ -36,10 +36,10 @@ public abstract class SlimeEntityMixin {
 
     @Inject(method = "pushAwayFrom", at = @At(value = "TAIL"))
     void redirectDamageMethod(Entity entity, CallbackInfo ci) {
-        if (((SlimeEntityAccessor) this).invokeCanAttack() && entity instanceof LivingEntity
+        if (((SlimeEntityInvoker) this).invokeCanAttack() && entity instanceof LivingEntity
                 && ((entity.getScoreboardTeam() != ((SlimeEntity) (Object) this).getScoreboardTeam() && ((entity instanceof HostileEntity && !(entity instanceof CreeperEntity)) || entity instanceof SlimeEntity))
                     || (entity.getScoreboardTeam() != ((SlimeEntity) (Object) this).getScoreboardTeam() && entity.getScoreboardTeam() != null))) {
-            ((SlimeEntityAccessor)this).invokeDamage((LivingEntity)entity);
+            ((SlimeEntityInvoker)this).invokeDamage((LivingEntity)entity);
         }
     }
 }

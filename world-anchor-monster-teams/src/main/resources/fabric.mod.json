@@ -1,27 +1,23 @@
 {
   "schemaVersion": 1,
-  "id": "world_anchor_monster_teams",
+  "id": "world-anchor-monster-teams",
   "version": "${version}",
   "name": "World Anchor's Monster Teams",
   "description": "A server side mod that extends the functionality of the Minecraft teams system to be work with monsters!",
   "license": "All rights reserved",
-
   "environment": "server",
   "entrypoints": {
-    "main": [
-      "com.worldanchor.monsterteams.Mod"
-    ],
     "server": [
       "com.worldanchor.monsterteams.Server"
     ]
   },
   "mixins": [
-    "world_anchor_monster_teams.mixins.json"
+    "world-anchor-monster-teams.mixins.json"
   ],
-
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.11.3",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.17.x",
+    "java": ">=16"
   }
 }

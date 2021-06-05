@@ -41,5 +41,10 @@
       <option name="name" value="UserLocalRemappedMods" />
       <option name="url" value="file:/$PROJECT_DIR$/world-anchor-patches/.gradle/loom-cache/remapped_mods/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/world-anchor-monster-teams/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
   </component>
 </project>

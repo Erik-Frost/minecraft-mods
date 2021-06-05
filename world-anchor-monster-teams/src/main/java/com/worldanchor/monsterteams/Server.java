@@ -5,19 +5,32 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.world.GameRules;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class Server implements DedicatedServerModInitializer {
+
+    public static final String MODID = "world-anchor-monster-teams";
+
+    //GameRules
+    public static final GameRules.Key<GameRules.BooleanRule> DISPLAY_TEAM_NAME_TAGS =
+            GameRuleRegistry.register("displayTeamNameTags", GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+    public static final GameRules.Key<GameRules.BooleanRule> SET_UP_BASIC_TEAMS_NEXT_SERVER_START =
+            GameRuleRegistry.register("setUpBasicTeamsNextServerStart", GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+
+
     @Override
     public void onInitializeServer() {
         ServerLifecycleEvents.SERVER_STARTED.register((minecraftServer) -> {
-            if (minecraftServer.getGameRules().getBoolean(Mod.SET_UP_BASIC_TEAMS_NEXT_SERVER_START)) {
+            if (minecraftServer.getGameRules().getBoolean(SET_UP_BASIC_TEAMS_NEXT_SERVER_START)) {
                 minecraftServer.getCommandManager().execute(minecraftServer.getCommandSource(), "team add default");
                 minecraftServer.getCommandManager().execute(minecraftServer.getCommandSource(), "team add red");
                 minecraftServer.getCommandManager().execute(minecraftServer.getCommandSource(), "team add orange");
@@ -31,7 +44,7 @@ public class Server implements DedicatedServerModInitializer {
                 minecraftServer.getCommandManager().execute(minecraftServer.getCommandSource(), "team modify green color green");
                 minecraftServer.getCommandManager().execute(minecraftServer.getCommandSource(), "team modify blue color aqua");
                 minecraftServer.getCommandManager().execute(minecraftServer.getCommandSource(), "team modify purple color light_purple");
-                minecraftServer.getGameRules().get(Mod.SET_UP_BASIC_TEAMS_NEXT_SERVER_START).set(false, minecraftServer);
+                minecraftServer.getGameRules().get(SET_UP_BASIC_TEAMS_NEXT_SERVER_START).set(false, minecraftServer);
             }
         });
 
@@ -51,7 +64,7 @@ public class Server implements DedicatedServerModInitializer {
                                 }
                             }
                             //Set corresponding gamerule
-                            source.getMinecraftServer().getGameRules().get(Mod.DISPLAY_TEAM_NAME_TAGS).set(displayTeamNameTags ,source.getMinecraftServer());
+                            source.getMinecraftServer().getGameRules().get(DISPLAY_TEAM_NAME_TAGS).set(displayTeamNameTags ,source.getMinecraftServer());
                             //Send feedback
                             if (displayTeamNameTags) source.sendFeedback(new TranslatableText(
                                     "chat.feedback.command.display_team_name_tags.true"), true);

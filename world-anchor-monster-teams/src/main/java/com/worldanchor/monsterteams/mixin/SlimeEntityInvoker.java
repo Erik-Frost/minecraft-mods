@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(SlimeEntity.class)
-public interface SlimeEntityAccessor {
+public interface SlimeEntityInvoker {
     @Invoker("canAttack")
     public boolean invokeCanAttack();
 
