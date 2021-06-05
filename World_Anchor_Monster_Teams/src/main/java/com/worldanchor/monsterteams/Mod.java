@@ -8,7 +8,7 @@ import net.minecraft.world.GameRules;
 
 public class Mod implements ModInitializer {
 
-    public static final String MODID = "wolrd_anchor_monster_teams";
+    public static final String MODID = "world_anchor_monster_teams";
 
     //GameRules
     public static final GameRules.Key<GameRules.BooleanRule> DISPLAY_TEAM_NAME_TAGS =
