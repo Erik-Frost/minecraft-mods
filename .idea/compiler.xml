@@ -2,6 +2,11 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="world-anchor-death-finder" target="16" />
+      <module name="world-anchor-death-finder.main" target="16" />
+      <module name="world-anchor-death-finder.test" target="16" />
+      <module name="world-anchor-qol-commands.main" target="16" />
+      <module name="world-anchor-qol-commands.test" target="16" />
       <module name="World_Anchor_Monster_Teams" target="16" />
       <module name="World_Anchor_Monster_Teams.main" target="16" />
       <module name="World_Anchor_Monster_Teams.test" target="16" />

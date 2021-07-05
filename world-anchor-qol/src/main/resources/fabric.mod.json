@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "world-anchor-qol",
+  "version": "${version}",
+  "name": "World Anchor Quality Of Life Changes",
+  "description": "A mod that adds some quality of life commands to survival Minecraft.",
+  "license": "All rights reserved.",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "com.worldanchor.qol.Server"
+    ]
+  },
+  "mixins": [
+    "world-anchor-qol.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  }
+}

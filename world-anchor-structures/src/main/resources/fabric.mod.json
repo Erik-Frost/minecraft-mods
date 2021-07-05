@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "world-anchor-structures",
+  "version": "${version}",
+  "name": "World Anchor Structures",
+  "description": "A mod that adds World Anchor's structures to minecraft world generation.",
+  "license": "All rights reserved.",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "com.worldanchor.structures.Server"
+    ]
+  },
+  "mixins": [
+    "world-anchor-structures.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  }
+}
