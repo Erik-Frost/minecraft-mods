@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.PoolStructurePiece;
@@ -30,6 +29,7 @@ import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
 
+import static com.worldanchor.structures.Server.MODID;
 import static com.worldanchor.structures.Utility.verticalBlockSampleCompare;
 
 public class EnderObeliskFeature extends StructureFeature<StructurePoolFeatureConfig> {
@@ -117,32 +117,33 @@ public class EnderObeliskFeature extends StructureFeature<StructurePoolFeatureCo
             boolean randomYPos = false;
             boolean calculateMaxYFromPiecePositions = false;
 
-            StructurePoolBasedGenerator.method_30419(registryManager, config, EnderCrystalPieces::new, chunkGenerator,
+            StructurePoolBasedGenerator.generate(registryManager, config, EnderObeliskPieces::new, chunkGenerator,
                     manager, mainBlockPos, this, random, calculateMaxYFromPiecePositions, randomYPos, world);
 
             setBoundingBoxFromChildren();
         }
     }
 
-    public static class EnderCrystalPieces extends PoolStructurePiece {
+    public static class EnderObeliskPieces extends PoolStructurePiece {
 
-        public EnderCrystalPieces(StructureManager structureManager,
+        public EnderObeliskPieces(StructureManager structureManager,
                 StructurePoolElement poolElement, BlockPos pos,
                 int groundLevelDelta, BlockRotation rotation, BlockBox boundingBox) {
             super(structureManager, poolElement, pos, groundLevelDelta, BlockRotation.NONE, boundingBox);
         }
 
-        public EnderCrystalPieces(ServerWorld world, NbtCompound tag) {
+        public EnderObeliskPieces(ServerWorld world, NbtCompound tag) {
             super(world, tag);
         }
 
         public static StructurePool STRUCTURE_POOLS = StructurePools.register(
                 new StructurePool(
-                        Server.BASE_POOL,
+                        new Identifier(MODID + ":ender-obelisk"),
                         new Identifier("empty"),
                         ImmutableList.of(
                                 // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                                Pair.of(StructurePoolElement.ofProcessedSingle(Server.MODID + ":ender-obelisk", Server.ENDER_OBELISK_PROCESSOR_LIST), 1)
+                                Pair.of(StructurePoolElement.ofProcessedSingle(Server.MODID + ":ender-obelisk",
+                                        Server.ENDER_OBELISK_PROCESSOR_LIST), 1)
                         ),
                         StructurePool.Projection.RIGID
                 )

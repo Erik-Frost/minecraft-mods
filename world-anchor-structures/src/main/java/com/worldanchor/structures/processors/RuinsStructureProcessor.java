@@ -22,12 +22,12 @@ import java.util.Random;
 public class RuinsStructureProcessor extends StructureProcessor {
 
     public static final Codec<RuinsStructureProcessor> CODEC = RecordCodecBuilder.create((proc) -> proc.group(
-            Codec.FLOAT.fieldOf("crackChance").forGetter(processor -> processor.deleteChance),
+            Codec.FLOAT.fieldOf("deleteChance").forGetter(processor -> processor.deleteChance),
             Codec.FLOAT.fieldOf("crackChance").forGetter(processor -> processor.crackChance),
             Codec.FLOAT.fieldOf("mossChance").forGetter(processor -> processor.mossChance),
-            Codec.FLOAT.fieldOf("deformChance").forGetter(processor -> processor.erodeChance),
+            Codec.FLOAT.fieldOf("erodeChance").forGetter(processor -> processor.erodeChance),
             Codec.FLOAT.fieldOf("infestChance").forGetter(processor -> processor.infestChance),
-            Codec.list(BlockState.CODEC).fieldOf("excludeBlocks").forGetter(processor -> processor.excludeDeleteBlocks)
+            Codec.list(BlockState.CODEC).fieldOf("excludeDeleteBlocks").forGetter(processor -> processor.excludeDeleteBlocks)
     ).apply(proc, RuinsStructureProcessor::new));
 
     private final float deleteChance;
@@ -59,7 +59,7 @@ public class RuinsStructureProcessor extends StructureProcessor {
 
         if (deleteChance > 0 && random.nextFloat() <= deleteChance
                 && !excludeDeleteBlocks.contains(blockState.getBlock().getDefaultState())) {
-            return null;
+            return new Structure.StructureBlockInfo(blockPos, Blocks.AIR.getDefaultState(), structureBlockInfo2.nbt);
         }
 
         if (crackChance > 0 && random.nextFloat() <= crackChance) {
@@ -86,6 +86,8 @@ public class RuinsStructureProcessor extends StructureProcessor {
             if (blockState.isOf(Blocks.STONE_BRICKS)) {blockState = Blocks.STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
                     .values()[random.nextInt(BlockHalf.values().length)]); }
             else if (blockState.isOf(Blocks.MOSSY_STONE_BRICKS)) {blockState = Blocks.MOSSY_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
+                    .values()[random.nextInt(BlockHalf.values().length)]); }
+            else if (blockState.isOf(Blocks.NETHER_BRICKS)) {blockState = Blocks.NETHER_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
                     .values()[random.nextInt(BlockHalf.values().length)]); }
         }
 

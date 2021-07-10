@@ -58,13 +58,13 @@ public class Server implements DedicatedServerModInitializer {
                             ServerCommandSource source = context.getSource();
                             boolean displayTeamNameTags = BoolArgumentType.getBool(context, "bool");
                             // Change all current mob nametags
-                            for (Team team : source.getMinecraftServer().getScoreboard().getTeams()) {
-                                for (MobEntity mobEntity : TeamUtil.getMobEntitiesOnTeam(team, source.getMinecraftServer())) {
+                            for (Team team : source.getServer().getScoreboard().getTeams()) {
+                                for (MobEntity mobEntity : TeamUtil.getMobEntitiesOnTeam(team, source.getServer())) {
                                     mobEntity.setCustomNameVisible(displayTeamNameTags);
                                 }
                             }
                             //Set corresponding gamerule
-                            source.getMinecraftServer().getGameRules().get(DISPLAY_TEAM_NAME_TAGS).set(displayTeamNameTags ,source.getMinecraftServer());
+                            source.getServer().getGameRules().get(DISPLAY_TEAM_NAME_TAGS).set(displayTeamNameTags ,source.getServer());
                             //Send feedback
                             if (displayTeamNameTags) source.sendFeedback(new TranslatableText(
                                     "chat.feedback.command.display_team_name_tags.true"), true);

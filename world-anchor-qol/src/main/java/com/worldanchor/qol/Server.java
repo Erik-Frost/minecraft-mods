@@ -29,7 +29,7 @@ public class Server implements DedicatedServerModInitializer {
                             .executes(context -> {
                                 ServerCommandSource source = context.getSource();
                                 teleportPlayerWithMountAndPassengers(source.getWorld().getSpawnPos(), source.getPlayer(),
-                                        source.getWorld(), source.getMinecraftServer());
+                                        source.getWorld(), source.getServer());
                                 return Command.SINGLE_SUCCESS;
                             })
             );
@@ -39,7 +39,7 @@ public class Server implements DedicatedServerModInitializer {
                         ServerCommandSource source = context.getSource();
                         if (source.getPlayer().getSpawnPointPosition() != null) {
                             teleportPlayerWithMountAndPassengers(source.getPlayer().getSpawnPointPosition().up(1), source.getPlayer(),
-                                    source.getWorld(), source.getMinecraftServer());
+                                    source.getWorld(), source.getServer());
                         }
                         return Command.SINGLE_SUCCESS;
                     })
