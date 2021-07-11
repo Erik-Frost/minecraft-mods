@@ -91,3 +91,9 @@ task runDedicatedTest(type: Exec, dependsOn: check) {
 			" " + projectDir.getName() + " " + archivesBaseName + "-" + project.mod_version + ".jar"
 }
 build.dependsOn runDedicatedTest
+
+// Runs batch script to auto copy builds from build server
+task getStructuresFromBuildServer(type: Exec, dependsOn: compileJava) {
+	commandLine 'cmd', '/c', "..\\GetStructuresFromBuildServer.bat"
+}
+processResources.dependsOn getStructuresFromBuildServer

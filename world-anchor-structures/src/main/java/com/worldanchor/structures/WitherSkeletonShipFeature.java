@@ -52,9 +52,9 @@ public class WitherSkeletonShipFeature extends StructureFeature<StructurePoolFea
         int x = chunkPos.getStartX();
         int z = chunkPos.getStartZ();
         return Utility.boxBlockSampleCompare(blockstate -> blockstate.isOf(Blocks.LAVA), chunkGenerator, world,
-                new BlockPos(x, 29, z), new BlockPos(x + 48, 32, z + 48))
+                new BlockPos(x, 29, z), new BlockPos(x + 48, 32, z + 19))
                 && Utility.boxBlockSampleCompare(AbstractBlock.AbstractBlockState::isAir, chunkGenerator, world,
-                new BlockPos(x, 33, z), new BlockPos(x + 48, 58, z + 48));
+                new BlockPos(x, 33, z), new BlockPos(x + 48, 58, z + 19));
     }
 
 
@@ -85,7 +85,7 @@ public class WitherSkeletonShipFeature extends StructureFeature<StructurePoolFea
         public WitherSkeletonShipPieces(StructureManager structureManager,
                 StructurePoolElement poolElement, BlockPos pos,
                 int groundLevelDelta, BlockRotation rotation, BlockBox boundingBox) {
-            super(structureManager, poolElement, pos, groundLevelDelta, rotation, boundingBox);
+            super(structureManager, poolElement, pos, groundLevelDelta, BlockRotation.NONE, boundingBox);
         }
 
         public WitherSkeletonShipPieces(ServerWorld world, NbtCompound tag) {

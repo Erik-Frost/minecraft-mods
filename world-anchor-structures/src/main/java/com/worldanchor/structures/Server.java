@@ -7,13 +7,16 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.structure.processor.StructureProcessor;
 import net.minecraft.structure.processor.StructureProcessorList;
 import net.minecraft.structure.processor.StructureProcessorType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.*;
 
@@ -24,6 +27,13 @@ import static com.worldanchor.structures.Utility.registerStructure;
 
 public class Server implements DedicatedServerModInitializer {
     public static final String MODID = "world-anchor-structures";
+
+    // Structure Spawn Pools
+    public static final Pool<SpawnSettings.SpawnEntry> ENDER_OBELISK_MONSTER_SPAWNS = Pool.of(new SpawnSettings.SpawnEntry(
+            EntityType.ENDERMAN, 1, 1, 3));
+    public static final Pool<SpawnSettings.SpawnEntry> SILVERFISH_NEST_MONSTER_SPAWNS = Pool.of(new SpawnSettings.SpawnEntry(
+            EntityType.SILVERFISH, 1, 1, 5));
+
 
     // Structure Features
     public static final StructureFeature<StructurePoolFeatureConfig> ENDER_OBELISK_FEATURE =
@@ -77,11 +87,12 @@ public class Server implements DedicatedServerModInitializer {
     );
     public static final StructureProcessorList WITHER_SKELETON_SHIP_PROCESSOR_LIST = BuiltinRegistries.add(
             BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, MODID + ":wither-skeleton-ship-processor-list", new StructureProcessorList(Arrays.asList(
-                    new RuinsStructureProcessor(0.5F,0.10F, 0.0f, 0.3F,0.0F, Arrays.asList(
+                    new RuinsStructureProcessor(0.05F,0.10F, 0.0f, 0.3F,0.0F, Arrays.asList(
                             Blocks.SPAWNER.getDefaultState(), Blocks.LAVA.getDefaultState(),
                             Blocks.CHEST.getDefaultState(), Blocks.WITHER_SKELETON_SKULL.getDefaultState(),
                             Blocks.BONE_BLOCK.getDefaultState(), Blocks.NETHER_BRICK_FENCE.getDefaultState(),
-                            Blocks.NETHER_BRICK_WALL.getDefaultState()
+                            Blocks.NETHER_BRICK_WALL.getDefaultState(), Blocks.NETHER_BRICK_STAIRS.getDefaultState(),
+                            Blocks.SOUL_SAND.getDefaultState()
                     ))
             ))
     );
@@ -94,7 +105,7 @@ public class Server implements DedicatedServerModInitializer {
                 GenerationStep.Feature.UNDERGROUND_DECORATION, 32, 16, 502359193,
                 SILVERFISH_NEST_FEATURE_CONFIGURED, false);
         registerStructure(new Identifier(MODID + ":wither-skeleton-ship"), WITHER_SKELETON_SHIP_FEATURE,
-                GenerationStep.Feature.LOCAL_MODIFICATIONS, 48, 32, 858204813,
+                GenerationStep.Feature.TOP_LAYER_MODIFICATION, 48, 32, 858204813,
                 WITHER_SKELETON_SHIP_FEATURE_CONFIGURED, false);
 
         //Registry.register(Registry.STRUCTURE_PIECE, new Identifier(MODID, "test_structure_piece"), PIECE);

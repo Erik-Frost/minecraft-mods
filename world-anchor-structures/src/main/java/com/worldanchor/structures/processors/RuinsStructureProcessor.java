@@ -57,8 +57,8 @@ public class RuinsStructureProcessor extends StructureProcessor {
         BlockState blockState = structureBlockInfo2.state;
         BlockPos blockPos = structureBlockInfo2.pos;
 
-        if (deleteChance > 0 && random.nextFloat() <= deleteChance
-                && !excludeDeleteBlocks.contains(blockState.getBlock().getDefaultState())) {
+        if (deleteChance > 0 && !blockState.isOf(Blocks.STRUCTURE_VOID) && !blockState.isAir()
+                && random.nextFloat() <= deleteChance && !excludeDeleteBlocks.contains(blockState.getBlock().getDefaultState())) {
             return new Structure.StructureBlockInfo(blockPos, Blocks.AIR.getDefaultState(), structureBlockInfo2.nbt);
         }
 
@@ -101,9 +101,6 @@ public class RuinsStructureProcessor extends StructureProcessor {
             else if (blockState.isOf(Blocks.CRACKED_STONE_BRICKS)) {blockState = Blocks.INFESTED_CRACKED_STONE_BRICKS.getDefaultState(); }
             else if (blockState.isOf(Blocks.CHISELED_STONE_BRICKS)) {blockState = Blocks.INFESTED_CHISELED_STONE_BRICKS.getDefaultState(); }
         }
-
-
-
 
         // Return new blockstate
         return new Structure.StructureBlockInfo(blockPos, blockState, structureBlockInfo2.nbt);
