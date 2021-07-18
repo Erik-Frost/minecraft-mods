@@ -22,29 +22,25 @@ import java.util.Random;
 public class RuinsStructureProcessor extends StructureProcessor {
 
     public static final Codec<RuinsStructureProcessor> CODEC = RecordCodecBuilder.create((proc) -> proc.group(
-            Codec.FLOAT.fieldOf("deleteChance").forGetter(processor -> processor.deleteChance),
             Codec.FLOAT.fieldOf("crackChance").forGetter(processor -> processor.crackChance),
             Codec.FLOAT.fieldOf("mossChance").forGetter(processor -> processor.mossChance),
             Codec.FLOAT.fieldOf("erodeChance").forGetter(processor -> processor.erodeChance),
-            Codec.FLOAT.fieldOf("infestChance").forGetter(processor -> processor.infestChance),
-            Codec.list(BlockState.CODEC).fieldOf("excludeDeleteBlocks").forGetter(processor -> processor.excludeDeleteBlocks)
+            Codec.FLOAT.fieldOf("infestChance").forGetter(processor -> processor.infestChance)
     ).apply(proc, RuinsStructureProcessor::new));
 
-    private final float deleteChance;
+    public static StructureProcessorType<RuinsStructureProcessor> TYPE = StructureProcessorType
+            .register(Server.MODID + ":ruins-structure-processor", CODEC);
+
     private final float mossChance;
     private final float crackChance;
     private final float erodeChance;
     private final float infestChance;
-    private final List<BlockState> excludeDeleteBlocks;
 
-    public RuinsStructureProcessor(float deleteChance, float crackChance, float mossChance, float erodeChance,
-            float infestChance, List<BlockState> excludeDeleteBlocks) {
-        this.deleteChance = deleteChance;
+    public RuinsStructureProcessor(float crackChance, float mossChance, float erodeChance, float infestChance) {
         this.crackChance = crackChance;
         this.mossChance = mossChance;
         this.erodeChance = erodeChance;
         this.infestChance = infestChance;
-        this.excludeDeleteBlocks = excludeDeleteBlocks;
     }
 
     // This method is called for each block in the structure
@@ -56,11 +52,6 @@ public class RuinsStructureProcessor extends StructureProcessor {
         Random random = data.getRandom(structureBlockInfo2.pos);
         BlockState blockState = structureBlockInfo2.state;
         BlockPos blockPos = structureBlockInfo2.pos;
-
-        if (deleteChance > 0 && !blockState.isOf(Blocks.STRUCTURE_VOID) && !blockState.isAir()
-                && random.nextFloat() <= deleteChance && !excludeDeleteBlocks.contains(blockState.getBlock().getDefaultState())) {
-            return new Structure.StructureBlockInfo(blockPos, Blocks.AIR.getDefaultState(), structureBlockInfo2.nbt);
-        }
 
         if (crackChance > 0 && random.nextFloat() <= crackChance) {
             if (blockState.isOf(Blocks.STONE_BRICKS)) { blockState = Blocks.CRACKED_STONE_BRICKS.getDefaultState(); }
@@ -80,9 +71,8 @@ public class RuinsStructureProcessor extends StructureProcessor {
             else if (blockState.isOf(Blocks.STONE_BRICK_WALL)) {blockState = Blocks.MOSSY_STONE_BRICK_WALL.getStateWithProperties(blockState); }
         }
 
-
         if (erodeChance > 0 && random.nextFloat() <= erodeChance) {
-            // Full block to stiars
+            // Full block to stairs
             if (blockState.isOf(Blocks.STONE_BRICKS)) {blockState = Blocks.STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
                     .values()[random.nextInt(BlockHalf.values().length)]); }
             else if (blockState.isOf(Blocks.MOSSY_STONE_BRICKS)) {blockState = Blocks.MOSSY_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
@@ -90,7 +80,6 @@ public class RuinsStructureProcessor extends StructureProcessor {
             else if (blockState.isOf(Blocks.NETHER_BRICKS)) {blockState = Blocks.NETHER_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
                     .values()[random.nextInt(BlockHalf.values().length)]); }
         }
-
 
         if (infestChance > 0 && random.nextFloat() <= infestChance) {
             if (blockState.isOf(Blocks.STONE)) {blockState = Blocks.INFESTED_STONE.getDefaultState(); }
@@ -108,6 +97,6 @@ public class RuinsStructureProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return Server.RUINS_STRUCTURE_PROCESSOR_TYPE;
+        return TYPE;
     }
 }

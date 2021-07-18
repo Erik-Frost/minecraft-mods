@@ -31,6 +31,10 @@ public class OresStructureProcessor extends StructureProcessor {
             Codec.INT.fieldOf("quartzWeight").forGetter(processor -> processor.quartzWeight)
     ).apply(proc, OresStructureProcessor::new));
 
+    public static StructureProcessorType<OresStructureProcessor> TYPE = StructureProcessorType
+            .register(Server.MODID + ":ores-structure-processor", CODEC);
+
+
     private final boolean blendStoneToDeepslate;
     private final float oreChance;
     private final int coalWeight;
@@ -112,6 +116,6 @@ public class OresStructureProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return Server.ORES_STRUCTURE_PROCESSOR_TYPE;
+        return TYPE;
     }
 }

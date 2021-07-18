@@ -1,6 +1,8 @@
 package com.worldanchor.structures.mixin;
 
-import com.worldanchor.structures.Server;
+import com.worldanchor.structures.features.EnderObeliskFeature;
+import com.worldanchor.structures.features.SilverfishNestFeature;
+import com.worldanchor.structures.features.WitherSkeletonShipFeature;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
@@ -19,13 +21,13 @@ public class NoiseChunkGeneratorMixin {
 
     @Inject(at = @At("HEAD"), method = "getEntitySpawnList", cancellable = true)
     public void injectSpawnList(Biome biome, StructureAccessor accessor, SpawnGroup group, BlockPos pos, CallbackInfoReturnable<Pool<SpawnSettings.SpawnEntry>> info) {
-        if (accessor.getStructureAt(pos, true, Server.ENDER_OBELISK_FEATURE).hasChildren()) {
-            if (group == SpawnGroup.MONSTER) info.setReturnValue(Server.ENDER_OBELISK_MONSTER_SPAWNS);
+        if (accessor.getStructureAt(pos, true, EnderObeliskFeature.DEFAULT).hasChildren()) {
+            if (group == SpawnGroup.MONSTER) info.setReturnValue(EnderObeliskFeature.MONSTER_SPAWNS);
         }
-        else if (accessor.getStructureAt(pos, true, Server.SILVERFISH_NEST_FEATURE).hasChildren()) {
-            if (group == SpawnGroup.MONSTER) info.setReturnValue(Server.SILVERFISH_NEST_MONSTER_SPAWNS);
+        else if (accessor.getStructureAt(pos, true, SilverfishNestFeature.DEFAULT).hasChildren()) {
+            if (group == SpawnGroup.MONSTER) info.setReturnValue(SilverfishNestFeature.MONSTER_SPAWNS);
         }
-        else if (accessor.getStructureAt(pos, true, Server.WITHER_SKELETON_SHIP_FEATURE).hasChildren()) {
+        else if (accessor.getStructureAt(pos, true, WitherSkeletonShipFeature.DEFAULT).hasChildren()) {
             if (group == SpawnGroup.MONSTER) info.setReturnValue(StructureFeature.FORTRESS.getMonsterSpawns());
         }
     }
