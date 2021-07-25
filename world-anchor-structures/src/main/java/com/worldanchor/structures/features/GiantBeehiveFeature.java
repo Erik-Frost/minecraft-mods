@@ -8,6 +8,7 @@ import com.worldanchor.structures.processors.BiomeStructureProcessor;
 import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.ReplaceBlocksStructureProcessor;
 import net.minecraft.block.Blocks;
+import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
@@ -90,22 +91,13 @@ public class GiantBeehiveFeature extends Utility.ModStructureFeature {
     public @Nullable Utility.PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager,
             ChunkGenerator generator, BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos,
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
-            StructurePoolFeatureConfig config, HeightLimitView world) {
-        int x = pos.getStartX();
-        int z = pos.getStartZ();
-        for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
-            int xMod = 1,zMod = 1;
-            if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
-            else if (rotation == BlockRotation.CLOCKWISE_180) xMod = zMod = -1;
-            else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) zMod = -1;
-            for (int y = generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 20;
-                    y < generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 5; y++) {
-                if (!Utility.boxBlockSampleCompare(blockstate -> Utility.BaseOverworldStoneOrOre(blockstate) || blockstate.isIn(
-                        BlockTags.DIRT), generator, world,
-                        new BlockPos(x + (8 * xMod), y + 8, z + (8 * zMod)),
-                        new BlockPos(x + (16 * xMod), y + 15, z + (16 * zMod)))) continue;
+            StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
+        int x = pos.getStartX(), z = pos.getStartZ();
+        Structure mask = manager.getStructure(new Identifier(MODID + ":" + ID.getPath() + "-mask")).get();
+        for (int y = generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 20;
+                y < generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world); y++) {
+            if (Utility.TestStructureMask(generator, world, mask, new BlockPos(x, y, z), xMod, zMod))
                 return new Utility.PlacementData(new BlockPos(x, y, z), rotation);
-            }
         }
         // Structure can't generate over here, return false
         return null;

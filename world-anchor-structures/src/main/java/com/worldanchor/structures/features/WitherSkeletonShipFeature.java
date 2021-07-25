@@ -9,6 +9,7 @@ import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.RuinsStructureProcessor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
+import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
@@ -82,51 +83,20 @@ public class WitherSkeletonShipFeature extends Utility.ModStructureFeature {
         super(codec);
     }
 
-    public static Utility.PlacementData getPlacementData(ChunkGenerator chunkGenerator, ChunkRandom random, ChunkPos chunkPos,
-            HeightLimitView world) {
-        int x = chunkPos.getStartX();
-        int z = chunkPos.getStartZ();
-        for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
-            int xMod = 1,zMod = 1;
-            if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
-            else if (rotation == BlockRotation.CLOCKWISE_180) xMod = zMod = -1;
-            else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) zMod = -1;
-            if (Utility.boxBlockSampleCompare(blockstate -> blockstate.isOf(Blocks.LAVA), chunkGenerator, world,
-                    new BlockPos(x, 29, z), new BlockPos(x + (48 * xMod), 32, z + (19 * zMod)))
-                    && Utility.boxBlockSampleCompare(AbstractBlock.AbstractBlockState::isAir, chunkGenerator, world,
-                    new BlockPos(x, 33, z), new BlockPos(x +  (48 * xMod), 58, z + (19 * zMod)))) {
-                return new Utility.PlacementData(new BlockPos(x, 29, z), rotation);
-            }
-        }
-        // Structure can't generate over here, return false
-        return null;
-    }
-
     @Override
     public @Nullable Utility.PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager,
             ChunkGenerator generator, BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos,
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
-            StructurePoolFeatureConfig config, HeightLimitView world) {
-        int x = pos.getStartX();
-        int z = pos.getStartZ();
-        for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
-            int xMod = 1,zMod = 1;
-            if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
-            else if (rotation == BlockRotation.CLOCKWISE_180) xMod = zMod = -1;
-            else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) zMod = -1;
-            if (Utility.boxBlockSampleCompare(blockstate -> blockstate.isOf(Blocks.LAVA), generator, world,
-                    new BlockPos(x, 29, z), new BlockPos(x + (48 * xMod), 32, z + (19 * zMod)))
-                    && Utility.boxBlockSampleCompare(AbstractBlock.AbstractBlockState::isAir, generator, world,
-                    new BlockPos(x, 33, z), new BlockPos(x +  (48 * xMod), 58, z + (19 * zMod)))) {
-                return new Utility.PlacementData(new BlockPos(x, 29, z), rotation);
-            }
+            StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
+        int x = pos.getStartX(), z = pos.getStartZ();
+        Structure mask = manager.getStructure(new Identifier(MODID + ":" + ID.getPath() + "-mask")).get();
+        for (int y = 15; y < 35; y++) {
+            if (Utility.TestStructureMask(generator, world, mask, new BlockPos(x, y, z), xMod, zMod))
+                return new Utility.PlacementData(new BlockPos(x, y, z), rotation);
         }
         // Structure can't generate over here, return false
         return null;
     }
-
-
-
 }
 
 

@@ -32,6 +32,8 @@ public class Server implements DedicatedServerModInitializer {
                 RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, SmugglersCacheFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInTheNether(),
                 RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, WitherSkeletonShipFeature.ID));
+        BiomeModifications.addStructure(BiomeSelectors.foundInTheNether(),
+                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, GhastTowerFeature.ID));
     }
 }
 

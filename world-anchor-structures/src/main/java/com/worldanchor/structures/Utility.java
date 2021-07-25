@@ -1,9 +1,12 @@
 package com.worldanchor.structures;
 
 import com.mojang.serialization.Codec;
+import com.worldanchor.structures.mixin.StructureMixin;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.structure.PoolStructurePiece;
+import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
@@ -13,7 +16,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.EmptyBlockView;
 import net.minecraft.world.HeightLimitView;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.ChunkRandom;
@@ -26,6 +32,8 @@ import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
 import org.jetbrains.annotations.Nullable;
+
+import static com.worldanchor.structures.Server.MODID;
 
 public class Utility {
 
@@ -50,59 +58,39 @@ public class Utility {
         builder.register();
     }
 
-    public interface BlockStateInterface {
-        boolean compareBlockState(BlockState blockstate);
-    }
+    public static boolean TestStructureMask(ChunkGenerator generator, HeightLimitView world, Structure mask, BlockPos structureStartBlockPos, int xMod, int zMod) {
 
-    public static boolean verticalBlockSampleCompare(VerticalBlockSample sample, BlockStateInterface condition,
-            int from, int to) {
-        if (from < to) {
-            for (int y = from; y < to; y++) {
-                if (!condition.compareBlockState(sample.getState(new BlockPos(0, y, 0)))) return false;
+        for (Structure.PalettedBlockInfoList palettedBlockInfoList : ((StructureMixin) mask).getBlockInfoLists()) {
+            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.AIR)) {
+                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
+                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
+                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
+                if (!generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos).isAir()) return false;
             }
-        }
-        else {
-            for (int y = from; y > to; y--) {
-                if (!condition.compareBlockState(sample.getState(new BlockPos(0, y, 0)))) return false;
+            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.LAVA)) {
+                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
+                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
+                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
+                if (!generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos).isOf(Blocks.LAVA)) return false;
             }
-        }
-        return true;
-    }
-
-    public static boolean boxBlockSampleCompare(BlockStateInterface condition, ChunkGenerator chunkGenerator,
-            HeightLimitView world, BlockPos corner1, BlockPos corner2) {
-        if (corner1.getX() < corner2.getX()) {
-            for (int x = corner1.getX(); x < corner2.getX(); x++) {
-                if (corner1.getZ() < corner2.getZ()) {
-                    for (int z = corner1.getZ(); z < corner2.getZ(); z++) {
-                        if (!verticalBlockSampleCompare(chunkGenerator.getColumnSample(x, z, world), condition, corner1.getY(), corner2.getY())) return false;
-                    }
-                }
-                else {
-                    for (int z = corner2.getZ(); z < corner1.getZ(); z++) {
-                        if (!verticalBlockSampleCompare(chunkGenerator.getColumnSample(x, z, world), condition, corner1.getY(), corner2.getY())) return false;
-                    }
-                }
-
+            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.WATER)) {
+                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
+                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
+                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
+                if (!generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos).isOf(Blocks.WATER)) return false;
             }
-        }
-        else {
-            for (int x = corner1.getX(); x > corner2.getX(); x--) {
-                if (corner1.getZ() < corner2.getZ()) {
-                    for (int z = corner1.getZ(); z < corner2.getZ(); z++) {
-                        if (!verticalBlockSampleCompare(chunkGenerator.getColumnSample(x, z, world), condition, corner1.getY(), corner2.getY())) return false;
-                    }
-                }
-                else {
-                    for (int z = corner1.getZ(); z > corner2.getZ(); z--) {
-                        if (!verticalBlockSampleCompare(chunkGenerator.getColumnSample(x, z, world), condition, corner1.getY(), corner2.getY())) return false;
-                    }
-                }
+            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.BEDROCK)) {
+                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
+                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
+                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
+                BlockState blockState = generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos);
 
+                if (blockState.isAir() || blockState.isOf(Blocks.WATER) || blockState.isOf(Blocks.LAVA)) return false;
             }
         }
         return true;
     }
+
 
     public static class PlacementData {
         public BlockPos blockPos;
@@ -159,23 +147,34 @@ public class Utility {
                 HeightLimitView world) {
             ChunkPos chunkPos = this.getStartChunk(structureConfig, worldSeed, random, pos.x, pos.z);
             PlacementData placementData;
-            if (pos.x == chunkPos.x && pos.z == chunkPos.z && (placementData = shouldStartAt(dynamicRegistryManager, generator,
-                    biomeSource, manager, worldSeed, pos, biome, referenceCount, random, structureConfig, config, world)) != null) {
-                ModStructureStart structureModStructureStart = (ModStructureStart) this.getStructureStartFactory().create(this, pos, referenceCount, worldSeed);
-                structureModStructureStart.setVariables(placementData, false);
-                structureModStructureStart.init(dynamicRegistryManager, generator, manager, pos, biome, config, world);
-                if (structureModStructureStart.hasChildren()) {
-                    return structureModStructureStart;
+            if (pos.x == chunkPos.x && pos.z == chunkPos.z) {
+                for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
+                    int xMod = 1,zMod = 1;
+                    if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
+                    else if (rotation == BlockRotation.CLOCKWISE_180) xMod = zMod = -1;
+                    else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) zMod = -1;
+                    if ((placementData = shouldStartAt(dynamicRegistryManager, generator, biomeSource, manager,
+                            worldSeed, pos, biome, referenceCount, random, structureConfig, config, world,
+                            rotation, xMod, zMod)) != null) {
+                        ModStructureStart structureModStructureStart = (ModStructureStart) this.getStructureStartFactory().create(this, pos, referenceCount, worldSeed);
+                        structureModStructureStart.setVariables(placementData, false);
+                        structureModStructureStart.init(dynamicRegistryManager, generator, manager, pos, biome, config, world);
+                        if (structureModStructureStart.hasChildren()) {
+                            return structureModStructureStart;
+                        }
+                    }
                 }
             }
 
             return StructureStart.DEFAULT;
         }
 
+
+
         @Nullable
         public abstract Utility.PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
                 BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos, Biome biome,
                 int referenceCount, ChunkRandom random, StructureConfig structureConfig, StructurePoolFeatureConfig config,
-                HeightLimitView world);
+                HeightLimitView world, BlockRotation rotation, int xMod, int zMod);
     }
 }
