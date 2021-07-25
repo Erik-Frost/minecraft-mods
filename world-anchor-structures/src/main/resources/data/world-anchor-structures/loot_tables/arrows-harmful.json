@@ -1,0 +1,55 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:tipped_arrow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Potion: \"minecraft:strong_harming\"}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:tipped_arrow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Potion: \"minecraft:long_weakness\"}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:tipped_arrow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Potion: \"minecraft:long_poison\"}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:tipped_arrow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Potion: \"minecraft:long_slowness\"}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

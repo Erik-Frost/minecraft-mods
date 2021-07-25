@@ -1,0 +1,109 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": {
+          "type": "minecraft:uniform",
+          "min": 12,
+          "max": 15
+        },
+        "bonus_rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:crossbow",
+            "functions": [
+              {
+                "function": "enchant_with_levels",
+                "treasure": true,
+                "levels": {
+                  "min": 20,
+                  "max": 30
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:bow",
+            "functions": [
+              {
+                "function": "enchant_with_levels",
+                "treasure": true,
+                "levels": {
+                  "min": 20,
+                  "max": 30
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:bow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Enchantments: [{lvl: 6s, id: \"minecraft:power\"}]}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:crossbow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Enchantments: [{lvl: 5s, id: \"minecraft:piercing\"}]}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:crossbow",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{Enchantments: [{lvl: 4s, id: \"minecraft:quick_charge\"}]}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 20,
+            "name": "world-anchor-structures:food-meat",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 24,
+                  "max": 48
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 10,
+            "name": "world-anchor-structures:arrows-harmful",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 32,
+                  "max": 64
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

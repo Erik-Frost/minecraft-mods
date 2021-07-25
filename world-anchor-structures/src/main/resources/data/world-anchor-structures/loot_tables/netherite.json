@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 100,
+            "name": "minecraft:netherite_ingot"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 120,
+            "name": "world-anchor-structures:netherite-gear",
+            "functions": [
+              {
+                "function": "enchant_with_levels",
+                "treasure": true,
+                "levels": 30
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

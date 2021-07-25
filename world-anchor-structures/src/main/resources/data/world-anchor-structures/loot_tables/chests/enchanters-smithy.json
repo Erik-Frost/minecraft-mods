@@ -1,0 +1,51 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": {
+          "type": "minecraft:uniform",
+          "min": 6,
+          "max": 9
+        },
+        "bonus_rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:loot_table",
+            "weight": 5,
+            "name": "world-anchor-structures:enchanting"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 7,
+            "name": "world-anchor-structures:impossible-enchanting"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 4,
+            "name": "world-anchor-structures:diamond"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 1,
+            "name": "world-anchor-structures:food-treasure"
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:obsidian",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 12,
+                  "max": 32
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

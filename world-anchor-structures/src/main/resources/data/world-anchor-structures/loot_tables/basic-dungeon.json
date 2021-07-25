@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:loot_table",
+            "weight": 1,
+            "name": "world-anchor-structures:food-treasure"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 3,
+            "name": "world-anchor-structures:enchanting"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 2,
+            "name": "world-anchor-structures:misc"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 2,
+            "name": "world-anchor-structures:redstone"
+          }
+        ]
+      }
+    ]
+  }
+  

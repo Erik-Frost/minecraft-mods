@@ -58,6 +58,7 @@ public class RuinsStructureProcessor extends StructureProcessor {
             else if (blockState.isOf(Blocks.DEEPSLATE_BRICKS)) { blockState = Blocks.CRACKED_DEEPSLATE_BRICKS.getDefaultState(); }
             else if (blockState.isOf(Blocks.DEEPSLATE_TILES)) { blockState = Blocks.CRACKED_DEEPSLATE_TILES.getDefaultState(); }
             else if (blockState.isOf(Blocks.NETHER_BRICKS)) { blockState = Blocks.CRACKED_NETHER_BRICKS.getDefaultState(); }
+            else if (blockState.isOf(Blocks.OBSIDIAN)) { blockState = Blocks.CRYING_OBSIDIAN.getDefaultState(); }
             else if (blockState.isOf(Blocks.POLISHED_BLACKSTONE_BRICKS)) { blockState = Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS.getDefaultState(); }
         }
         else if (mossChance > 0 && random.nextFloat() <= mossChance) {
@@ -78,6 +79,10 @@ public class RuinsStructureProcessor extends StructureProcessor {
             else if (blockState.isOf(Blocks.MOSSY_STONE_BRICKS)) {blockState = Blocks.MOSSY_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
                     .values()[random.nextInt(BlockHalf.values().length)]); }
             else if (blockState.isOf(Blocks.NETHER_BRICKS)) {blockState = Blocks.NETHER_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
+                    .values()[random.nextInt(BlockHalf.values().length)]); }
+            else if (blockState.isOf(Blocks.DEEPSLATE_BRICKS)) {blockState = Blocks.DEEPSLATE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
+                    .values()[random.nextInt(BlockHalf.values().length)]); }
+            else if (blockState.isOf(Blocks.DEEPSLATE_TILES)) {blockState = Blocks.DEEPSLATE_TILE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.Type.HORIZONTAL.random(random)).with(StairsBlock.HALF, BlockHalf
                     .values()[random.nextInt(BlockHalf.values().length)]); }
         }
 

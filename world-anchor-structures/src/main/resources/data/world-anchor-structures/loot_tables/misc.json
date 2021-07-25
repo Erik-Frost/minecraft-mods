@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 10,
+            "name": "minecraft:name_tag"
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 3,
+            "name": "minecraft:saddle"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 1,
+            "name": "world-anchor-structures:music-discs"
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 40,
+            "name": "minecraft:potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:12,Duration:144000}],CustomPotionColor:16415744,display:{Name:\"{\\\"text\\\":\\\"Legendary Potion Of Fire Resistance\\\",\\\"color\\\":\\\"gold\\\"}\"}}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

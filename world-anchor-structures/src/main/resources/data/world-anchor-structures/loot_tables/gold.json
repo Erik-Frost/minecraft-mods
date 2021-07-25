@@ -1,0 +1,46 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 100,
+            "name": "minecraft:gold_ingot",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 8,
+                  "max": 24
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 120,
+            "name": "world-anchor-structures:golden-gear",
+            "functions": [
+              {
+                "function": "enchant_with_levels",
+                "treasure": true,
+                "levels": {
+                  "min": 15,
+                  "max": 25
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 5,
+            "name": "minecraft:golden_horse_armor"
+          }
+        ]
+      }
+    ]
+  }

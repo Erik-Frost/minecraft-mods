@@ -21,22 +21,22 @@ public class ReplaceBlocksStructureProcessor extends StructureProcessor {
 
     public static final Codec<ReplaceBlocksStructureProcessor> CODEC = RecordCodecBuilder.create((proc) -> proc.group(
             Codec.list(BlockState.CODEC).fieldOf("blocksToReplace").forGetter(processor -> processor.blocksToReplace),
-            Codec.list(Codec.pair(Codec.INT, BlockState.CODEC)).fieldOf("replacingBlocks").forGetter(processor -> processor.replacingBlockWeights)
+            Codec.compoundList(Codec.STRING, BlockState.CODEC).fieldOf("replacingBlocks").forGetter(processor -> processor.replacingBlockWeights)
     ).apply(proc, ReplaceBlocksStructureProcessor::new));
 
     public static StructureProcessorType<ReplaceBlocksStructureProcessor> TYPE = StructureProcessorType
             .register(Server.MODID + ":replace-blocks-structure-processor", CODEC);
 
     private final List<BlockState> blocksToReplace;
-    private final List<Pair<Integer, BlockState>> replacingBlockWeights;
+    private final List<Pair<String, BlockState>> replacingBlockWeights;
     private int totalWeight;
 
-    public ReplaceBlocksStructureProcessor(List<BlockState> blocksToReplace, List<Pair<Integer, BlockState>> replacingBlockWeights) {
+    public ReplaceBlocksStructureProcessor(List<BlockState> blocksToReplace, List<Pair<String, BlockState>> replacingBlockWeights) {
         this.blocksToReplace = blocksToReplace;
         this.replacingBlockWeights = replacingBlockWeights;
         totalWeight = 0;
-        for (Pair<Integer, BlockState> replacingBlockWeight : replacingBlockWeights) {
-            totalWeight += replacingBlockWeight.getFirst();
+        for (Pair<String, BlockState> replacingBlockWeight : replacingBlockWeights) {
+            totalWeight += Integer.parseInt(replacingBlockWeight.getFirst());
         }
     }
 
@@ -49,11 +49,10 @@ public class ReplaceBlocksStructureProcessor extends StructureProcessor {
         Random random = data.getRandom(structureBlockInfo2.pos);
         BlockState blockState = structureBlockInfo2.state;
         BlockPos blockPos = structureBlockInfo2.pos;
-
         if (blocksToReplace.contains(blockState.getBlock().getDefaultState())) {
             int num = random.nextInt(totalWeight);
-            for (Pair<Integer, BlockState> replacingBlockWeight : replacingBlockWeights) {
-                if ((num = num - replacingBlockWeight.getFirst()) < 0)  {
+            for (Pair<String, BlockState> replacingBlockWeight : replacingBlockWeights) {
+                if ((num = num - Integer.parseInt(replacingBlockWeight.getFirst())) < 0)  {
                     blockState = replacingBlockWeight.getSecond().getBlock().getStateWithProperties(blockState);
                     break;
                 }

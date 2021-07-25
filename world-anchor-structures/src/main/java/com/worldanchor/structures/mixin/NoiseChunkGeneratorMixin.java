@@ -1,6 +1,7 @@
 package com.worldanchor.structures.mixin;
 
 import com.worldanchor.structures.features.EnderObeliskFeature;
+import com.worldanchor.structures.features.GiantBeehiveFeature;
 import com.worldanchor.structures.features.SilverfishNestFeature;
 import com.worldanchor.structures.features.WitherSkeletonShipFeature;
 import net.minecraft.entity.SpawnGroup;

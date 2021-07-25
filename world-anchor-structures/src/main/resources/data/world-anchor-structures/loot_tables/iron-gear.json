@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:loot_table",
+            "weight": 4,
+            "name": "world-anchor-structures:iron-armor"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 4,
+            "name": "world-anchor-structures:iron-tools"
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:iron_sword"
+          }
+        ]
+      }
+    ]
+  }

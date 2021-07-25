@@ -3,28 +3,20 @@ package com.worldanchor.structures.features;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.worldanchor.structures.Server;
 import com.worldanchor.structures.Utility;
 import com.worldanchor.structures.processors.OresStructureProcessor;
 import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.RuinsStructureProcessor;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.PoolStructurePiece;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructureStart;
 import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolBasedGenerator;
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.structure.pool.StructurePools;
 import net.minecraft.structure.processor.StructureProcessorList;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.Pool;
-import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.BuiltinRegistries;
@@ -37,22 +29,24 @@ import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.StructureConfig;
 import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
 import static com.worldanchor.structures.Server.MODID;
 import static com.worldanchor.structures.Utility.registerStructure;
 
-public class SilverfishNestFeature extends StructureFeature<StructurePoolFeatureConfig> {
+public class SilverfishNestFeature extends Utility.ModStructureFeature {
     public static Identifier ID = new Identifier(MODID + ":silverfish-nest");
 
     public static Pool<SpawnSettings.SpawnEntry> MONSTER_SPAWNS = Pool.of(new SpawnSettings.SpawnEntry(
             EntityType.SILVERFISH, 1, 1, 5));
 
-    public static StructureProcessorList SILVERFISH_NEST_PROCESSOR_LIST = BuiltinRegistries.add(
+    public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.add(
             BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, MODID + ":silverfish-nest-processor-list", new StructureProcessorList(
                     Arrays.asList(
                             new RandomDeleteStructureProcessor(0.15f, true, Arrays.asList(
@@ -69,7 +63,7 @@ public class SilverfishNestFeature extends StructureFeature<StructurePoolFeature
                     ImmutableList.of(
                             // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
                             Pair.of(StructurePoolElement.ofProcessedSingle(MODID + ":silverfish-nest",
-                                    SILVERFISH_NEST_PROCESSOR_LIST), 1)
+                                    PROCESSOR_LIST), 1)
                     ),
                     StructurePool.Projection.RIGID
             )
@@ -91,15 +85,12 @@ public class SilverfishNestFeature extends StructureFeature<StructurePoolFeature
     }
 
     @Override
-    public StructureStartFactory<StructurePoolFeatureConfig> getStructureStartFactory() {
-        return (feature, pos, references, seed) -> new Utility.Start(feature, pos, references, seed,
-                SilverfishNestFeature::getPlacementData);
-    }
-
-    public static Utility.PlacementData getPlacementData(ChunkGenerator chunkGenerator, ChunkRandom random, ChunkPos chunkPos,
-            HeightLimitView world) {
-        int x = chunkPos.getStartX();
-        int z = chunkPos.getStartZ();
+    public @Nullable Utility.PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager,
+            ChunkGenerator generator, BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos,
+            Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
+            StructurePoolFeatureConfig config, HeightLimitView world) {
+        int x = pos.getStartX();
+        int z = pos.getStartZ();
         for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
             int xMod = 1,zMod = 1;
             if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
@@ -107,21 +98,14 @@ public class SilverfishNestFeature extends StructureFeature<StructurePoolFeature
             else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) zMod = -1;
             for (int y = -50; y < 10; y++) {
                 // Check all 4 corner edges from where the base ends to the peak, should all be air blocks
-                if (!Utility.boxBlockSampleCompare(Utility::BaseOverworldStoneOrOre, chunkGenerator, world,
+                if (!Utility.boxBlockSampleCompare(Utility::BaseOverworldStoneOrOre, generator, world,
                         new BlockPos(x + (8 * xMod), y + 8, z + (8 * zMod)),
                         new BlockPos(x + (18 * xMod), y + 18, z + (18 * zMod)))) continue;
-                return new Utility.PlacementData(new BlockPos(x, y, z), rotation, true);
+                return new Utility.PlacementData(new BlockPos(x, y, z), rotation);
             }
         }
         // Structure can't generate over here, return false
-        return new Utility.PlacementData(null, null, false);
-    }
-
-    @Override
-    protected boolean shouldStartAt(ChunkGenerator chunkGenerator, BiomeSource biomeSource, long worldSeed,
-            ChunkRandom random, ChunkPos pos, Biome biome, ChunkPos chunkPos, StructurePoolFeatureConfig config,
-            HeightLimitView world) {
-        return getPlacementData(chunkGenerator, random, chunkPos, world).canPlace;
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.worldanchor.structures;
 
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.structure.PoolStructurePiece;
@@ -14,14 +15,17 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.StructureConfig;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import org.jetbrains.annotations.Nullable;
 
 public class Utility {
 
@@ -33,17 +37,7 @@ public class Utility {
                 || blockstate.isIn(BlockTags.REDSTONE_ORES) || blockstate.isIn(BlockTags.LAPIS_ORES);
     }
 
-    public static class PlacementData {
-        public BlockPos blockPos;
-        public BlockRotation rotation;
-        public boolean canPlace;
 
-        public PlacementData(BlockPos blockPos, BlockRotation rotation, boolean canPlace) {
-            this.blockPos = blockPos;
-            this.rotation = rotation;
-            this.canPlace = canPlace;
-        }
-    }
 
     public static <FC extends FeatureConfig, S extends StructureFeature<FC>> void registerStructure(Identifier id, S f, GenerationStep.Feature step, int spacing, int separation, int salt,  ConfiguredStructureFeature<FC, ? extends StructureFeature<FC>> c, boolean adjustsSurface) {
         FabricStructureBuilder<FC, S> builder = FabricStructureBuilder.create(id, f)
@@ -110,39 +104,78 @@ public class Utility {
         return true;
     }
 
+    public static class PlacementData {
+        public BlockPos blockPos;
+        public BlockRotation rotation;
 
-    public interface PlacementDataInterface {
-        PlacementData getPlacementData(ChunkGenerator chunkGenerator, ChunkRandom random, ChunkPos chunkPos,
-                HeightLimitView world);
+        public PlacementData(BlockPos blockPos, BlockRotation rotation) {
+            this.blockPos = blockPos;
+            this.rotation = rotation;
+        }
     }
 
-    public static class Start extends StructureStart<StructurePoolFeatureConfig> {
+    public static class ModStructureStart extends StructureStart<StructurePoolFeatureConfig> {
 
-        public PlacementDataInterface placementDataInterface;
+        PlacementData placementData;
+        boolean surface;
 
-        public Start(StructureFeature<StructurePoolFeatureConfig> feature, ChunkPos pos, int references, long seed,
-                PlacementDataInterface placementDataInterface) {
+        public ModStructureStart(StructureFeature<StructurePoolFeatureConfig> feature, ChunkPos pos, int references, long seed) {
             super(feature, pos, references, seed);
-            this.placementDataInterface = placementDataInterface;
+        }
+
+        public void setVariables(PlacementData placementData, boolean surface) {
+            this.placementData = placementData;
+            this.surface = surface;
         }
 
         @Override
         public void init(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator,
                 StructureManager manager, ChunkPos chunkPos, Biome biome, StructurePoolFeatureConfig config,
                 HeightLimitView world) {
-            // Get placement data
-            Utility.PlacementData placementData = placementDataInterface
-                    .getPlacementData(chunkGenerator, random, chunkPos, world);
             // Generate structure
             StructurePoolBasedGenerator.generate(registryManager, config,
                     (structureManager, structurePoolElement, pos, groundLevelData, blockRotation, boundingBox) ->
                             new PoolStructurePiece(structureManager, structurePoolElement, pos, groundLevelData,
-                            placementData.rotation, structurePoolElement.getBoundingBox(structureManager, pos, placementData.rotation)), chunkGenerator,
-                    manager, placementData.blockPos, this, random, false, false, world);
+                                    placementData.rotation, structurePoolElement.getBoundingBox(structureManager, pos, placementData.rotation)), chunkGenerator,
+                    manager, placementData.blockPos, this, random, false, surface, world);
             // Makes bounding box encompass all structure pieces
             setBoundingBoxFromChildren();
         }
-
     }
 
+    public abstract static class ModStructureFeature extends StructureFeature<StructurePoolFeatureConfig> {
+
+        public ModStructureFeature(Codec<StructurePoolFeatureConfig> codec) { super(codec); }
+
+        @Override
+        public StructureStartFactory<StructurePoolFeatureConfig> getStructureStartFactory() {
+            return ModStructureStart::new;
+        }
+
+        @Override
+        public StructureStart<?> tryPlaceStart(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
+                BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos, Biome biome,
+                int referenceCount, ChunkRandom random, StructureConfig structureConfig, StructurePoolFeatureConfig config,
+                HeightLimitView world) {
+            ChunkPos chunkPos = this.getStartChunk(structureConfig, worldSeed, random, pos.x, pos.z);
+            PlacementData placementData;
+            if (pos.x == chunkPos.x && pos.z == chunkPos.z && (placementData = shouldStartAt(dynamicRegistryManager, generator,
+                    biomeSource, manager, worldSeed, pos, biome, referenceCount, random, structureConfig, config, world)) != null) {
+                ModStructureStart structureModStructureStart = (ModStructureStart) this.getStructureStartFactory().create(this, pos, referenceCount, worldSeed);
+                structureModStructureStart.setVariables(placementData, false);
+                structureModStructureStart.init(dynamicRegistryManager, generator, manager, pos, biome, config, world);
+                if (structureModStructureStart.hasChildren()) {
+                    return structureModStructureStart;
+                }
+            }
+
+            return StructureStart.DEFAULT;
+        }
+
+        @Nullable
+        public abstract Utility.PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
+                BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos, Biome biome,
+                int referenceCount, ChunkRandom random, StructureConfig structureConfig, StructurePoolFeatureConfig config,
+                HeightLimitView world);
+    }
 }
