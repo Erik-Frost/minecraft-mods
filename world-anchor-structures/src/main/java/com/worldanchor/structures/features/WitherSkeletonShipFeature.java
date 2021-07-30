@@ -7,9 +7,7 @@ import com.worldanchor.structures.Utility;
 import com.worldanchor.structures.processors.ChestLootStructureProcessor;
 import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.RuinsStructureProcessor;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
-import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
@@ -73,14 +71,14 @@ public class WitherSkeletonShipFeature extends Utility.ModStructureFeature {
             ? extends StructureFeature<StructurePoolFeatureConfig>> CONFIGURED
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
-        registerStructure(ID, DEFAULT, GenerationStep.Feature.VEGETAL_DECORATION,
+        registerStructure(ID, DEFAULT, GenerationStep.Feature.TOP_LAYER_MODIFICATION,
                 48, 32, 858204813, CONFIGURED, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
     }
 
 
     public WitherSkeletonShipFeature(Codec<StructurePoolFeatureConfig> codec) {
-        super(codec);
+        super(codec, ID);
     }
 
     @Override
@@ -89,13 +87,9 @@ public class WitherSkeletonShipFeature extends Utility.ModStructureFeature {
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
             StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
         int x = pos.getStartX(), z = pos.getStartZ();
-        Structure mask = manager.getStructure(new Identifier(MODID + ":" + ID.getPath() + "-mask")).get();
-        for (int y = 15; y < 35; y++) {
-            if (Utility.TestStructureMask(generator, world, mask, new BlockPos(x, y, z), xMod, zMod))
-                return new Utility.PlacementData(new BlockPos(x, y, z), rotation);
-        }
-        // Structure can't generate over here, return false
-        return null;
+        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, 28, 29, 1);
+        if (structurePos == null) return null;
+        else return new Utility.PlacementData(structurePos, rotation);
     }
 }
 

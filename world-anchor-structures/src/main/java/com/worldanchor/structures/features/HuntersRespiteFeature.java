@@ -6,8 +6,6 @@ import com.mojang.serialization.Codec;
 import com.worldanchor.structures.Utility;
 import com.worldanchor.structures.processors.BiomeStructureProcessor;
 import com.worldanchor.structures.processors.ChestLootStructureProcessor;
-import net.minecraft.block.Blocks;
-import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
@@ -72,8 +70,9 @@ public class HuntersRespiteFeature extends Utility.ModStructureFeature {
     }
 
 
+
     public HuntersRespiteFeature(Codec<StructurePoolFeatureConfig> codec) {
-        super(codec);
+        super(codec, ID);
     }
 
     @Override
@@ -82,14 +81,11 @@ public class HuntersRespiteFeature extends Utility.ModStructureFeature {
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
             StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
         int x = pos.getStartX(), z = pos.getStartZ();
-        Structure mask = manager.getStructure(new Identifier(MODID + ":" + ID.getPath() + "-mask")).get();
-        for (int y = generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 10;
-                y < generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) + 10 ; y++) {
-            if (Utility.TestStructureMask(generator, world, mask, new BlockPos(x, y, z), xMod, zMod))
-                return new Utility.PlacementData(new BlockPos(x, y, z), rotation);
-        }
-        // Structure can't generate over here, return false
-        return null;
+        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 0, z), xMod, zMod,
+                generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) + 10,
+                generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 10, -1);
+        if (structurePos == null) return null;
+        else return new Utility.PlacementData(structurePos, rotation);
     }
 
 

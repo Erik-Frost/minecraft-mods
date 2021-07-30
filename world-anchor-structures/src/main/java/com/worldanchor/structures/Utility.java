@@ -1,5 +1,6 @@
 package com.worldanchor.structures;
 
+import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.worldanchor.structures.mixin.StructureMixin;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
@@ -13,13 +14,11 @@ import net.minecraft.structure.pool.StructurePoolBasedGenerator;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.EmptyBlockView;
 import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.ChunkRandom;
@@ -33,19 +32,13 @@ import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.worldanchor.structures.Server.MODID;
 
 public class Utility {
-
-    public static boolean BaseOverworldStoneOrOre(BlockState blockstate) {
-        return blockstate.isIn(BlockTags.BASE_STONE_OVERWORLD)
-                || blockstate.isIn(BlockTags.COAL_ORES) || blockstate.isIn(BlockTags.IRON_ORES)
-                || blockstate.isIn(BlockTags.COPPER_ORES) || blockstate.isIn(BlockTags.GOLD_ORES)
-                || blockstate.isIn(BlockTags.DIAMOND_ORES) || blockstate.isIn(BlockTags.EMERALD_ORES)
-                || blockstate.isIn(BlockTags.REDSTONE_ORES) || blockstate.isIn(BlockTags.LAPIS_ORES);
-    }
-
-
 
     public static <FC extends FeatureConfig, S extends StructureFeature<FC>> void registerStructure(Identifier id, S f, GenerationStep.Feature step, int spacing, int separation, int salt,  ConfiguredStructureFeature<FC, ? extends StructureFeature<FC>> c, boolean adjustsSurface) {
         FabricStructureBuilder<FC, S> builder = FabricStructureBuilder.create(id, f)
@@ -56,39 +49,6 @@ public class Utility {
             builder.adjustsSurface();
         }
         builder.register();
-    }
-
-    public static boolean TestStructureMask(ChunkGenerator generator, HeightLimitView world, Structure mask, BlockPos structureStartBlockPos, int xMod, int zMod) {
-
-        for (Structure.PalettedBlockInfoList palettedBlockInfoList : ((StructureMixin) mask).getBlockInfoLists()) {
-            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.AIR)) {
-                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
-                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
-                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
-                if (!generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos).isAir()) return false;
-            }
-            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.LAVA)) {
-                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
-                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
-                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
-                if (!generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos).isOf(Blocks.LAVA)) return false;
-            }
-            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.WATER)) {
-                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
-                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
-                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
-                if (!generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos).isOf(Blocks.WATER)) return false;
-            }
-            for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAllOf(Blocks.BEDROCK)) {
-                BlockPos rotatedBlockPos = new BlockPos((xMod * maskBlockInfo.pos.getX()) + structureStartBlockPos.getX(),
-                        maskBlockInfo.pos.getY() + structureStartBlockPos.getY(),
-                        (zMod * maskBlockInfo.pos.getZ()) + structureStartBlockPos.getZ());
-                BlockState blockState = generator.getColumnSample(rotatedBlockPos.getX(), rotatedBlockPos.getZ(), world).getState(rotatedBlockPos);
-
-                if (blockState.isAir() || blockState.isOf(Blocks.WATER) || blockState.isOf(Blocks.LAVA)) return false;
-            }
-        }
-        return true;
     }
 
 
@@ -131,9 +91,29 @@ public class Utility {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     public abstract static class ModStructureFeature extends StructureFeature<StructurePoolFeatureConfig> {
 
-        public ModStructureFeature(Codec<StructurePoolFeatureConfig> codec) { super(codec); }
+        public Map<Pair<Integer, Integer>, ArrayList<Structure.StructureBlockInfo>> maskBlockInfoList;
+        public final Identifier id;
+
+        public ModStructureFeature(Codec<StructurePoolFeatureConfig> codec, Identifier id) {
+            super(codec);
+            this.id = id;
+        }
+
+
 
         @Override
         public StructureStartFactory<StructurePoolFeatureConfig> getStructureStartFactory() {
@@ -148,6 +128,19 @@ public class Utility {
             ChunkPos chunkPos = this.getStartChunk(structureConfig, worldSeed, random, pos.x, pos.z);
             PlacementData placementData;
             if (pos.x == chunkPos.x && pos.z == chunkPos.z) {
+                if (maskBlockInfoList == null) {
+                    maskBlockInfoList = new HashMap<>();
+                    for (Structure.PalettedBlockInfoList palettedBlockInfoList :
+                            ((StructureMixin) manager.getStructure(new Identifier(MODID + ":" + id.getPath() + "-mask")).get()).getBlockInfoLists()) {
+                        for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAll()) {
+                            if (!maskBlockInfo.state.isOf(Blocks.STRUCTURE_VOID)) {
+                                Pair<Integer, Integer> coords = new Pair<>(maskBlockInfo.pos.getX(), maskBlockInfo.pos.getZ());
+                                if (!maskBlockInfoList.containsKey(coords)) maskBlockInfoList.put(coords, new ArrayList<>());
+                                maskBlockInfoList.get(coords).add(maskBlockInfo);
+                            }
+                        }
+                    }
+                }
                 for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
                     int xMod = 1,zMod = 1;
                     if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
@@ -169,12 +162,39 @@ public class Utility {
             return StructureStart.DEFAULT;
         }
 
-
-
         @Nullable
-        public abstract Utility.PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
+        public abstract PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
                 BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos, Biome biome,
                 int referenceCount, ChunkRandom random, StructureConfig structureConfig, StructurePoolFeatureConfig config,
                 HeightLimitView world, BlockRotation rotation, int xMod, int zMod);
+
+        public BlockPos TestStructureMask(ChunkGenerator generator, HeightLimitView world,
+                BlockPos structureStartBlockPos, int xMod, int zMod, int yFrom, int yTo, int yIncrement) {
+            Map<Pair<Integer, Integer>, VerticalBlockSample> verticalBlockSamples = new HashMap<>();
+            Pair<Integer, Integer> rotatedKey = new Pair<>(0, 0);
+            boolean validPosition;
+            for (int y = yFrom; y != yTo; y += yIncrement) {
+                validPosition = true;
+                for (Pair<Integer, Integer> key : maskBlockInfoList.keySet()) {
+                    rotatedKey = new Pair<>((xMod * key.getLeft()) + structureStartBlockPos.getX(),
+                            (zMod * key.getRight()) + structureStartBlockPos.getZ());
+                    if (!verticalBlockSamples.containsKey(rotatedKey)) verticalBlockSamples.put(rotatedKey,
+                            generator.getColumnSample(rotatedKey.getLeft(), rotatedKey.getRight(), world));
+                    for (Structure.StructureBlockInfo maskBlockInfo : maskBlockInfoList.get(key)) {
+                        BlockState worldBlockState = verticalBlockSamples.get(rotatedKey).getState(new BlockPos(0, maskBlockInfo.pos.getY() + y, 0));
+                        if ((maskBlockInfo.state.isAir() && !worldBlockState.isAir())
+                                || (maskBlockInfo.state.isOf(Blocks.BEDROCK) && (worldBlockState.isAir() || worldBlockState.isOf(Blocks.WATER) || worldBlockState.isOf(Blocks.LAVA)))
+                                || (maskBlockInfo.state.isOf(Blocks.LAVA) && !worldBlockState.isOf(Blocks.LAVA))
+                                || (maskBlockInfo.state.isOf(Blocks.WATER) && !worldBlockState.isOf(Blocks.WATER))) {
+                            validPosition = false;
+                            break;
+                        }
+                    }
+                    if (!validPosition) break;
+                }
+                if (validPosition) return new BlockPos(structureStartBlockPos.getX(), y+1, structureStartBlockPos.getZ());
+            }
+            return null;
+        }
     }
 }

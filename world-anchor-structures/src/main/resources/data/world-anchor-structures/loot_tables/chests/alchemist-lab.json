@@ -1,0 +1,47 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": {
+          "type": "minecraft:uniform",
+          "min": 6,
+          "max": 9
+        },
+        "bonus_rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:loot_table",
+            "weight": 5,
+            "name": "world-anchor-structures:potions"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 5,
+            "name": "world-anchor-structures:potion-ingredients",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 16,
+                  "max": 48
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:12,Duration:144000}],CustomPotionColor:16415744,display:{Name:\"{\\\"text\\\":\\\"Legendary Potion Of Fire Resistance\\\",\\\"color\\\":\\\"gold\\\"}\"}}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

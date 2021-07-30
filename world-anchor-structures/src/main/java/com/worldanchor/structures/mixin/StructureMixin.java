@@ -10,4 +10,5 @@ import java.util.List;
 public interface StructureMixin {
     @Accessor
     List<Structure.PalettedBlockInfoList> getBlockInfoLists();
+
 }

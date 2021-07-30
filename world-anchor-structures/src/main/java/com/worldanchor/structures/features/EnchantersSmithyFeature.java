@@ -8,7 +8,6 @@ import com.worldanchor.structures.processors.ChestLootStructureProcessor;
 import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.RuinsStructureProcessor;
 import net.minecraft.block.Blocks;
-import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
@@ -22,7 +21,6 @@ import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.ChunkRandom;
@@ -45,7 +43,7 @@ public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
     public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.add(
             BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, MODID + ":enchanters-smithy-processor-list", new StructureProcessorList(
                     Arrays.asList(
-                            new RandomDeleteStructureProcessor(0.0f, true, Arrays.asList(
+                            new RandomDeleteStructureProcessor(0.05f, true, Arrays.asList(
                                     Blocks.CHEST.getDefaultState(), Blocks.ENCHANTING_TABLE.getDefaultState(),
                                     Blocks.LAVA.getDefaultState(), Blocks.PURPLE_BED.getDefaultState(),
                                     Blocks.CAMPFIRE.getDefaultState()
@@ -79,7 +77,7 @@ public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
 
 
     public EnchantersSmithyFeature(Codec<StructurePoolFeatureConfig> codec) {
-        super(codec);
+        super(codec, ID);
     }
 
 
@@ -89,13 +87,10 @@ public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
             StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
         int x = pos.getStartX(), z = pos.getStartZ();
-        Structure mask = manager.getStructure(new Identifier(MODID + ":" + ID.getPath() + "-mask")).get();
-        for (int y = world.getBottomY() + 5; y < world.getBottomY() + 50; y++) {
-            if (Utility.TestStructureMask(generator, world, mask, new BlockPos(x, y, z), xMod, zMod))
-                return new Utility.PlacementData(new BlockPos(x, y, z), rotation);
-        }
-        // Structure can't generate over here, return false
-        return null;
+        int randomY = random.nextInt(64) - 60;
+        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, randomY, randomY+1, 1);
+        if (structurePos == null) return null;
+        else return new Utility.PlacementData(structurePos, rotation);
     }
 
 }
