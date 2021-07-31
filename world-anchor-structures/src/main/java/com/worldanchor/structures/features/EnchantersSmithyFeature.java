@@ -71,7 +71,7 @@ public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                85,72,873452344,CONFIGURED, false);
+                85,72,873452344, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
     }
 
@@ -87,8 +87,8 @@ public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
             StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
         int x = pos.getStartX(), z = pos.getStartZ();
-        int randomY = random.nextInt(64) - 60;
-        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, randomY, randomY+1, 1);
+        int randomY = random.nextInt(40) - 60;
+        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, randomY, randomY+10, 5);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
     }

@@ -1,6 +1,5 @@
 package com.worldanchor.structures;
 
-import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.worldanchor.structures.mixin.StructureMixin;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
@@ -11,7 +10,6 @@ import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -26,7 +24,6 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.StructureConfig;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
-import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
@@ -40,11 +37,11 @@ import static com.worldanchor.structures.Server.MODID;
 
 public class Utility {
 
-    public static <FC extends FeatureConfig, S extends StructureFeature<FC>> void registerStructure(Identifier id, S f, GenerationStep.Feature step, int spacing, int separation, int salt,  ConfiguredStructureFeature<FC, ? extends StructureFeature<FC>> c, boolean adjustsSurface) {
+    public static <FC extends FeatureConfig, S extends StructureFeature<FC>> void registerStructure(Identifier id, S f,
+            GenerationStep.Feature step, int spacing, int separation, int salt, boolean adjustsSurface) {
         FabricStructureBuilder<FC, S> builder = FabricStructureBuilder.create(id, f)
                 .step(step)
-                .defaultConfig(spacing, separation, salt)
-                .superflatFeature(c);
+                .defaultConfig(spacing, separation, salt);
         if (adjustsSurface) {
             builder.adjustsSurface();
         }
@@ -143,9 +140,9 @@ public class Utility {
                 }
                 for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
                     int xMod = 1,zMod = 1;
-                    if (rotation == BlockRotation.CLOCKWISE_90) xMod = -1;
+                    if (rotation == BlockRotation.CLOCKWISE_90) zMod = -1;
                     else if (rotation == BlockRotation.CLOCKWISE_180) xMod = zMod = -1;
-                    else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) zMod = -1;
+                    else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) xMod = -1;
                     if ((placementData = shouldStartAt(dynamicRegistryManager, generator, biomeSource, manager,
                             worldSeed, pos, biome, referenceCount, random, structureConfig, config, world,
                             rotation, xMod, zMod)) != null) {

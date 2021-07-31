@@ -80,7 +80,7 @@ public class EnderObeliskFeature extends Utility.ModStructureFeature {
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                124, 110, 120301413, CONFIGURED, false);
+                124, 110, 120301413, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
 
     }

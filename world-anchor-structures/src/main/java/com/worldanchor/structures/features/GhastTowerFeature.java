@@ -66,7 +66,7 @@ public class GhastTowerFeature extends Utility.ModStructureFeature {
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                48, 32, 120915301, CONFIGURED, false);
+                48, 32, 120915301, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
     }
 

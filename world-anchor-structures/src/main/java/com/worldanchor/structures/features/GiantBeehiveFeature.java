@@ -63,8 +63,7 @@ public class GiantBeehiveFeature extends Utility.ModStructureFeature {
                     ID, new Identifier("empty"),
                     ImmutableList.of(
                             // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                            Pair.of(StructurePoolElement.ofProcessedSingle(MODID + ":giant-beehive",
-                                    PROCESSOR_LIST), 1)
+                            Pair.of(StructurePoolElement.ofProcessedSingle(MODID + ":giant-beehive", PROCESSOR_LIST), 1)
                     ),
                     StructurePool.Projection.RIGID
             )
@@ -75,8 +74,18 @@ public class GiantBeehiveFeature extends Utility.ModStructureFeature {
             ? extends StructureFeature<StructurePoolFeatureConfig>> CONFIGURED
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
+        StructurePools.register(
+                new StructurePool(
+                        new Identifier(MODID + ":entity/bee"), new Identifier("empty"),
+                        ImmutableList.of(
+                                // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
+                                Pair.of(StructurePoolElement.ofSingle(MODID + ":entity/bee"), 1)
+                        ),
+                        StructurePool.Projection.RIGID
+                )
+        );
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                64,60,634523774,CONFIGURED, false);
+                64,60,634523774, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
     }
 

@@ -62,7 +62,7 @@ public class AlchemistLabFeature extends Utility.ModStructureFeature {
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                48,32,723415563,CONFIGURED, false);
+                48,32,723415563, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
     }
 
@@ -77,7 +77,7 @@ public class AlchemistLabFeature extends Utility.ModStructureFeature {
             Biome biome, int referenceCount, ChunkRandom random, StructureConfig structureConfig,
             StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
         int x = pos.getStartX(), z = pos.getStartZ();
-        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, 35, 80, 1);
+        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, 80, 35, -1);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
     }

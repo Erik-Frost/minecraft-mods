@@ -7,13 +7,13 @@
         "entries": [
           {
             "type": "minecraft:loot_table",
-            "weight": 11,
-            "name": "world-anchor-structures:potions-beneficial"
+            "weight": 9,
+            "name": "world-anchor-structures:potions-legendary-beneficial"
           },
           {
             "type": "minecraft:loot_table",
             "weight": 4,
-            "name": "world-anchor-structures:potions-harmful"
+            "name": "world-anchor-structures:potions-legendary-harmful"
           }
         ]
       }

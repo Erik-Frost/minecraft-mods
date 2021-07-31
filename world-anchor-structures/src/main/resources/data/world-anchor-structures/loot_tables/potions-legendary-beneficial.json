@@ -1,0 +1,110 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:12,Duration:216000}],CustomPotionColor:14981690,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Fire Resistance\\\",\\\"color\\\":\\\"gold\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:13,Duration:432000}],CustomPotionColor:3035801,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Water Breathing\\\",\\\"color\\\":\\\"blue\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:14,Duration:216000}],CustomPotionColor:8356754,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Invisibility\\\",\\\"color\\\":\\\"gray\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:3,Amplifier:2,Duration:72000}],CustomPotionColor:14270531,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Haste\\\",\\\"color\\\":\\\"yellow\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:1,Amplifier:2,Duration:36000}],CustomPotionColor:8171462,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Swiftness\\\",\\\"color\\\":\\\"aqua\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:5,Amplifier:2,Duration:18000}],CustomPotionColor:9643043,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Strength\\\",\\\"color\\\":\\\"dark_red\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:8,Amplifier:2,Duration:36000}],CustomPotionColor:2293580,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Leaping\\\",\\\"color\\\":\\\"green\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:10,Amplifier:2,Duration:6000}],CustomPotionColor:13458603,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Regeneration\\\",\\\"color\\\":\\\"light_purple\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:6,Amplifier:2}],CustomPotionColor:16262179,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Healing\\\",\\\"color\\\":\\\"red\\\"}\"}}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

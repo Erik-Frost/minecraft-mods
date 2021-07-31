@@ -75,7 +75,7 @@ public class SilverfishNestFeature extends Utility.ModStructureFeature {
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Feature.UNDERGROUND_DECORATION,
-                32, 16, 502359193, CONFIGURED, false);
+                32, 16, 502359193, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
 
     }

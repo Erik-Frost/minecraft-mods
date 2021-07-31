@@ -1,0 +1,55 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "bonus_rolls": 0,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:7,Amplifier:2}],CustomPotionColor:4393481,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Harming\\\",\\\"color\\\":\\\"dark_red\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:19,Amplifier:2,Duration:6000}],CustomPotionColor:5149489,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Poison\\\",\\\"color\\\":\\\"dark_green\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:18,Amplifier:2,Duration:18000}],CustomPotionColor:4738376,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Weakness\\\",\\\"color\\\":\\\"dark_gray\\\"}\"}}"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:item",
+            "weight": 1,
+            "name": "minecraft:lingering_potion",
+            "functions": [
+              {
+                "function": "set_nbt",
+                "tag": "{CustomPotionEffects:[{Id:2,Amplifier:2,Duration:36000}],CustomPotionColor:5926017,display:{Name:\"{\\\"text\\\":\\\"Legendary Lingering Potion of Slowness\\\",\\\"color\\\":\\\"gray\\\"}\"}}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

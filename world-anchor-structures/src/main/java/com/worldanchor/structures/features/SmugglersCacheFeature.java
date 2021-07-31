@@ -64,8 +64,19 @@ public class SmugglersCacheFeature extends Utility.ModStructureFeature {
             ? extends StructureFeature<StructurePoolFeatureConfig>> CONFIGURED
             = DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, 1));
     static {
+        StructurePools.register(
+                new StructurePool(
+                        new Identifier(MODID + ":entity/undead-horse"), new Identifier("empty"),
+                        ImmutableList.of(
+                                // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
+                                Pair.of(StructurePoolElement.ofSingle(MODID + ":entity/skeleton-horse"), 1),
+                                Pair.of(StructurePoolElement.ofSingle(MODID + ":entity/zombie-horse"), 1)
+                        ),
+                        StructurePool.Projection.RIGID
+                )
+        );
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                70,54,568234126,CONFIGURED, false);
+                70,54,568234126, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID, CONFIGURED);
     }
 
