@@ -97,7 +97,7 @@ public class EnderObeliskFeature extends Utility.ModStructureFeature {
         int x = pos.getStartX(), z = pos.getStartZ();
         BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 0, z), xMod, zMod,
                 Math.min(world.getHeight() - 34, generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) + 8),
-                generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 8, -1);
+                generator.getHeightOnGround(x, z, Heightmap.Type.WORLD_SURFACE_WG, world) - 8, -1, rotation);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
 

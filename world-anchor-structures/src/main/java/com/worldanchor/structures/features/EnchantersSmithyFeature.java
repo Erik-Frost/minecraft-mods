@@ -88,7 +88,8 @@ public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
             StructurePoolFeatureConfig config, HeightLimitView world, BlockRotation rotation, int xMod, int zMod) {
         int x = pos.getStartX(), z = pos.getStartZ();
         int randomY = random.nextInt(40) - 60;
-        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, randomY, randomY+10, 5);
+        BlockPos structurePos = TestStructureMask(generator, world, new BlockPos(x, 29, z), xMod, zMod, randomY, randomY+10, 5,
+                rotation);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
     }

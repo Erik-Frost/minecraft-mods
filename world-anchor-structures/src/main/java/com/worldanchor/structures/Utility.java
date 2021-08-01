@@ -10,6 +10,7 @@ import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
+import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.worldanchor.structures.Server.MODID;
+import static net.minecraft.structure.Structure.transformAround;
 
 public class Utility {
 
@@ -166,15 +168,17 @@ public class Utility {
                 HeightLimitView world, BlockRotation rotation, int xMod, int zMod);
 
         public BlockPos TestStructureMask(ChunkGenerator generator, HeightLimitView world,
-                BlockPos structureStartBlockPos, int xMod, int zMod, int yFrom, int yTo, int yIncrement) {
+                BlockPos structureStartBlockPos, int xMod, int zMod, int yFrom, int yTo, int yIncrement,
+                BlockRotation rotation) {
             Map<Pair<Integer, Integer>, VerticalBlockSample> verticalBlockSamples = new HashMap<>();
-            Pair<Integer, Integer> rotatedKey = new Pair<>(0, 0);
+            Pair<Integer, Integer> rotatedKey;
+            BlockPos rotatedBlockPos;
             boolean validPosition;
             for (int y = yFrom; y != yTo; y += yIncrement) {
                 validPosition = true;
                 for (Pair<Integer, Integer> key : maskBlockInfoList.keySet()) {
-                    rotatedKey = new Pair<>((xMod * key.getLeft()) + structureStartBlockPos.getX(),
-                            (zMod * key.getRight()) + structureStartBlockPos.getZ());
+                    rotatedBlockPos = transformAround(new BlockPos(key.getLeft() + structureStartBlockPos.getX(), 0, key.getRight() + structureStartBlockPos.getZ()), BlockMirror.NONE, rotation, new BlockPos(structureStartBlockPos.getX(), 0, structureStartBlockPos.getZ()));
+                    rotatedKey = new Pair<>(rotatedBlockPos.getX(), rotatedBlockPos.getZ());
                     if (!verticalBlockSamples.containsKey(rotatedKey)) verticalBlockSamples.put(rotatedKey,
                             generator.getColumnSample(rotatedKey.getLeft(), rotatedKey.getRight(), world));
                     for (Structure.StructureBlockInfo maskBlockInfo : maskBlockInfoList.get(key)) {
