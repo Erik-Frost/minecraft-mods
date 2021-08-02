@@ -1,9 +1,6 @@
 package com.worldanchor.structures.mixin;
 
-import com.worldanchor.structures.features.EnderObeliskFeature;
-import com.worldanchor.structures.features.GiantBeehiveFeature;
-import com.worldanchor.structures.features.SilverfishNestFeature;
-import com.worldanchor.structures.features.WitherSkeletonShipFeature;
+import com.worldanchor.structures.features.*;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +24,9 @@ public class NoiseChunkGeneratorMixin {
         }
         else if (accessor.getStructureAt(pos, true, SilverfishNestFeature.DEFAULT).hasChildren()) {
             if (group == SpawnGroup.MONSTER) info.setReturnValue(SilverfishNestFeature.MONSTER_SPAWNS);
+        }
+        else if (accessor.getStructureAt(pos, true, WitchHouseFeature.DEFAULT).hasChildren()) {
+            if (group == SpawnGroup.MONSTER) info.setReturnValue(WitchHouseFeature.MONSTER_SPAWNS);
         }
         else if (accessor.getStructureAt(pos, true, WitherSkeletonShipFeature.DEFAULT).hasChildren()) {
             if (group == SpawnGroup.MONSTER) info.setReturnValue(StructureFeature.FORTRESS.getMonsterSpawns());

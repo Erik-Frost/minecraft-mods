@@ -1,0 +1,41 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": {
+          "type": "minecraft:uniform",
+          "min": 5,
+          "max": 8
+        },
+        "bonus_rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:loot_table",
+            "weight": 1,
+            "name": "world-anchor-structures:potions-harmful"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 1,
+            "name": "world-anchor-structures:potions-legendary-harmful"
+          },
+          {
+            "type": "minecraft:loot_table",
+            "weight": 1,
+            "name": "world-anchor-structures:potion-ingredients",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 8,
+                  "max": 32
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

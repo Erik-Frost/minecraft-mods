@@ -4,20 +4,22 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.worldanchor.structures.Utility;
-import com.worldanchor.structures.processors.BiomeStructureProcessor;
 import com.worldanchor.structures.processors.ChestLootStructureProcessor;
+import net.minecraft.entity.EntityType;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.structure.pool.StructurePools;
 import net.minecraft.structure.processor.StructureProcessorList;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
@@ -31,14 +33,16 @@ import java.util.Arrays;
 import static com.worldanchor.structures.Server.MODID;
 import static com.worldanchor.structures.Utility.registerStructure;
 
-public class HuntersRespiteFeature extends Utility.ModStructureFeature {
-    public static Identifier ID = new Identifier(MODID + ":hunters-respite");
+public class WitchHouseFeature extends Utility.ModStructureFeature {
+    public static Identifier ID = new Identifier(MODID + ":witch-house");
+
+    public static Pool<SpawnSettings.SpawnEntry> MONSTER_SPAWNS = Pool.of(new SpawnSettings.SpawnEntry(
+            EntityType.WITCH, 1, 1, 3));
 
     public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.add(
             BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
                     Arrays.asList(
-                            new ChestLootStructureProcessor(ID.getPath()),
-                            new BiomeStructureProcessor(true)
+                            new ChestLootStructureProcessor(ID.getPath())
                     )
             )
     );
@@ -51,17 +55,16 @@ public class HuntersRespiteFeature extends Utility.ModStructureFeature {
             StructurePool.Projection.RIGID
     ));
     public static final StructureFeature<StructurePoolFeatureConfig> DEFAULT =
-            new HuntersRespiteFeature(StructurePoolFeatureConfig.CODEC);
+            new WitchHouseFeature(StructurePoolFeatureConfig.CODEC);
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
-                49,32,952838493, false);
+                45,28,345624113, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID,
                 DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.getElementCount())));
     }
 
 
-
-    public HuntersRespiteFeature(Codec<StructurePoolFeatureConfig> codec) {
+    public WitchHouseFeature(Codec<StructurePoolFeatureConfig> codec) {
         super(codec, ID);
     }
 
@@ -69,12 +72,11 @@ public class HuntersRespiteFeature extends Utility.ModStructureFeature {
     public @Nullable Utility.PlacementData shouldStartAt(ChunkGenerator generator, ChunkPos pos,
             ChunkRandom random, HeightLimitView world, BlockRotation rotation) {
         BlockPos structurePos = TestStructureMask(generator, world,
-                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) + 10,
-                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) - 10, -1, rotation, pos);
+                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) - 25,
+                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) - 5, 1, rotation, pos);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
     }
-
 
 }
 

@@ -10,7 +10,6 @@ import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
-import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -92,16 +91,6 @@ public class Utility {
 
 
 
-
-
-
-
-
-
-
-
-
-
     public abstract static class ModStructureFeature extends StructureFeature<StructurePoolFeatureConfig> {
 
         public Map<Pair<Integer, Integer>, ArrayList<Structure.StructureBlockInfo>> maskBlockInfoList;
@@ -111,9 +100,7 @@ public class Utility {
             super(codec);
             this.id = id;
         }
-
-
-
+        
         @Override
         public StructureStartFactory<StructurePoolFeatureConfig> getStructureStartFactory() {
             return ModStructureStart::new;
@@ -141,13 +128,7 @@ public class Utility {
                     }
                 }
                 for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
-                    int xMod = 1,zMod = 1;
-                    if (rotation == BlockRotation.CLOCKWISE_90) zMod = -1;
-                    else if (rotation == BlockRotation.CLOCKWISE_180) xMod = zMod = -1;
-                    else if (rotation == BlockRotation.COUNTERCLOCKWISE_90) xMod = -1;
-                    if ((placementData = shouldStartAt(dynamicRegistryManager, generator, biomeSource, manager,
-                            worldSeed, pos, biome, referenceCount, random, structureConfig, config, world,
-                            rotation, xMod, zMod)) != null) {
+                    if ((placementData = shouldStartAt(generator, pos, random, world, rotation)) != null) {
                         ModStructureStart structureModStructureStart = (ModStructureStart) this.getStructureStartFactory().create(this, pos, referenceCount, worldSeed);
                         structureModStructureStart.setVariables(placementData, false);
                         structureModStructureStart.init(dynamicRegistryManager, generator, manager, pos, biome, config, world);
@@ -161,24 +142,25 @@ public class Utility {
             return StructureStart.DEFAULT;
         }
 
+
         @Nullable
-        public abstract PlacementData shouldStartAt(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
-                BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos, Biome biome,
-                int referenceCount, ChunkRandom random, StructureConfig structureConfig, StructurePoolFeatureConfig config,
-                HeightLimitView world, BlockRotation rotation, int xMod, int zMod);
+        public abstract PlacementData shouldStartAt(ChunkGenerator generator, ChunkPos pos,
+                ChunkRandom random, HeightLimitView world, BlockRotation rotation);
 
         public BlockPos TestStructureMask(ChunkGenerator generator, HeightLimitView world,
-                BlockPos structureStartBlockPos, int xMod, int zMod, int yFrom, int yTo, int yIncrement,
-                BlockRotation rotation) {
+                int yFrom, int yTo, int yIncrement, BlockRotation rotation, ChunkPos chunkPos) {
+            int startX = chunkPos.getStartX(), startZ = chunkPos.getStartZ();
             Map<Pair<Integer, Integer>, VerticalBlockSample> verticalBlockSamples = new HashMap<>();
             Pair<Integer, Integer> rotatedKey;
-            BlockPos rotatedBlockPos;
             boolean validPosition;
             for (int y = yFrom; y != yTo; y += yIncrement) {
                 validPosition = true;
                 for (Pair<Integer, Integer> key : maskBlockInfoList.keySet()) {
-                    rotatedBlockPos = transformAround(new BlockPos(key.getLeft() + structureStartBlockPos.getX(), 0, key.getRight() + structureStartBlockPos.getZ()), BlockMirror.NONE, rotation, new BlockPos(structureStartBlockPos.getX(), 0, structureStartBlockPos.getZ()));
-                    rotatedKey = new Pair<>(rotatedBlockPos.getX(), rotatedBlockPos.getZ());
+                    // This rotation logic needs to match that in Structure.transformAround
+                    rotatedKey = key;
+                    if (rotation == BlockRotation.COUNTERCLOCKWISE_90) rotatedKey = new Pair<>(startX - startZ + (key.getRight() + startZ), startX + startZ - (key.getLeft() + startX));
+                    else if (rotation == BlockRotation.CLOCKWISE_90) rotatedKey = new Pair<>(startX + startZ - (key.getRight() + startZ), startZ - startX + (key.getLeft() + startX));
+                    else if (rotation == BlockRotation.CLOCKWISE_180) rotatedKey = new Pair<>(startX + startX - (key.getLeft() + startX), startZ + startZ - (key.getRight() + startZ));
                     if (!verticalBlockSamples.containsKey(rotatedKey)) verticalBlockSamples.put(rotatedKey,
                             generator.getColumnSample(rotatedKey.getLeft(), rotatedKey.getRight(), world));
                     for (Structure.StructureBlockInfo maskBlockInfo : maskBlockInfoList.get(key)) {
@@ -193,7 +175,7 @@ public class Utility {
                     }
                     if (!validPosition) break;
                 }
-                if (validPosition) return new BlockPos(structureStartBlockPos.getX(), y+1, structureStartBlockPos.getZ());
+                if (validPosition) return new BlockPos(startX, y+1, startZ);
             }
             return null;
         }

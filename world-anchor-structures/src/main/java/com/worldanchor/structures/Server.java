@@ -38,6 +38,8 @@ public class Server implements DedicatedServerModInitializer {
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld()
                         .and(BiomeSelectors.categories(Biome.Category.OCEAN, Biome.Category.BEACH, Biome.Category.RIVER).negate()),
                 RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, SmugglersCacheFeature.ID));
+        BiomeModifications.addStructure(BiomeSelectors.categories(Biome.Category.SWAMP),
+                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, WitchHouseFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInTheNether(),
                 RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, WitherSkeletonShipFeature.ID));
 
