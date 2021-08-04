@@ -4,14 +4,13 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.worldanchor.structures.Server;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.structure.Structure;
-import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.processor.StructureProcessor;
-import net.minecraft.structure.processor.StructureProcessorType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -43,24 +42,24 @@ public class ReplaceBlocksStructureProcessor extends StructureProcessor {
     // This method is called for each block in the structure
     @Nullable
     @Override
-    public Structure.StructureBlockInfo process(WorldView world, BlockPos pos, BlockPos pivot,
-            Structure.StructureBlockInfo structureBlockInfo, Structure.StructureBlockInfo structureBlockInfo2,
-            StructurePlacementData data) {
+    public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos pivot,
+            StructureTemplate.StructureBlockInfo structureBlockInfo, StructureTemplate.StructureBlockInfo structureBlockInfo2,
+            StructurePlaceSettings data) {
         Random random = data.getRandom(structureBlockInfo2.pos);
         BlockState blockState = structureBlockInfo2.state;
         BlockPos blockPos = structureBlockInfo2.pos;
-        if (blocksToReplace.contains(blockState.getBlock().getDefaultState())) {
+        if (blocksToReplace.contains(blockState.getBlock().defaultBlockState())) {
             int num = random.nextInt(totalWeight);
             for (Pair<String, BlockState> replacingBlockWeight : replacingBlockWeights) {
                 if ((num = num - Integer.parseInt(replacingBlockWeight.getFirst())) < 0)  {
-                    blockState = replacingBlockWeight.getSecond().getBlock().getStateWithProperties(blockState);
+                    blockState = replacingBlockWeight.getSecond().getBlock().withPropertiesOf(blockState);
                     break;
                 }
             }
         }
 
         // Return new blockstate
-        return new Structure.StructureBlockInfo(blockPos, blockState, structureBlockInfo2.nbt);
+        return new StructureTemplate.StructureBlockInfo(blockPos, blockState, structureBlockInfo2.nbt);
     }
 
     @Override

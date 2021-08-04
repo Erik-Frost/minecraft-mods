@@ -3,14 +3,14 @@ package com.worldanchor.structures.processors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.worldanchor.structures.Server;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.structure.Structure;
-import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.processor.StructureProcessor;
-import net.minecraft.structure.processor.StructureProcessorType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -70,48 +70,48 @@ public class OresStructureProcessor extends StructureProcessor {
     // This method is called for each block in the structure
     @Nullable
     @Override
-    public Structure.StructureBlockInfo process(WorldView world, BlockPos pos, BlockPos pivot,
-            Structure.StructureBlockInfo structureBlockInfo, Structure.StructureBlockInfo structureBlockInfo2,
-            StructurePlacementData data) {
+    public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos pivot,
+            StructureTemplate.StructureBlockInfo structureBlockInfo, StructureTemplate.StructureBlockInfo structureBlockInfo2,
+            StructurePlaceSettings data) {
         Random random = data.getRandom(structureBlockInfo2.pos);
         BlockState blockState = structureBlockInfo2.state;
         BlockPos blockPos = structureBlockInfo2.pos;
 
-        if (blendStoneToDeepslate &&  blockState.isOf(Blocks.STONE) && structureBlockInfo2.pos.getY() < -random.nextInt(8))
-            blockState = Blocks.DEEPSLATE.getDefaultState();
+        if (blendStoneToDeepslate &&  blockState.is(Blocks.STONE) && structureBlockInfo2.pos.getY() < -random.nextInt(8))
+            blockState = Blocks.DEEPSLATE.defaultBlockState();
 
         if (oreChance > 0 && random.nextFloat() <= oreChance) {
-            if (blockState.isOf(Blocks.STONE)) {
+            if (blockState.is(Blocks.STONE)) {
                 int num = random.nextInt(stoneTotal);
-                if ((num = num - coalWeight) < 0) blockState = Blocks.COAL_ORE.getDefaultState();
-                else if ((num = num - ironWeight) < 0) blockState = Blocks.IRON_ORE.getDefaultState();
-                else if ((num = num - goldWeight) < 0) blockState = Blocks.GOLD_ORE.getDefaultState();
-                else if ((num = num - copperWeight) < 0) blockState = Blocks.COPPER_ORE.getDefaultState();
-                else if ((num = num - redstoneWeight) < 0) blockState = Blocks.REDSTONE_ORE.getDefaultState();
-                else if ((num = num - lapisWeight) < 0) blockState = Blocks.LAPIS_ORE.getDefaultState();
-                else if ((num = num - emeraldWeight) < 0) blockState = Blocks.EMERALD_ORE.getDefaultState();
-                else if ((num - diamondWeight) < 0) blockState = Blocks.DIAMOND_ORE.getDefaultState();
+                if ((num = num - coalWeight) < 0) blockState = Blocks.COAL_ORE.defaultBlockState();
+                else if ((num = num - ironWeight) < 0) blockState = Blocks.IRON_ORE.defaultBlockState();
+                else if ((num = num - goldWeight) < 0) blockState = Blocks.GOLD_ORE.defaultBlockState();
+                else if ((num = num - copperWeight) < 0) blockState = Blocks.COPPER_ORE.defaultBlockState();
+                else if ((num = num - redstoneWeight) < 0) blockState = Blocks.REDSTONE_ORE.defaultBlockState();
+                else if ((num = num - lapisWeight) < 0) blockState = Blocks.LAPIS_ORE.defaultBlockState();
+                else if ((num = num - emeraldWeight) < 0) blockState = Blocks.EMERALD_ORE.defaultBlockState();
+                else if ((num - diamondWeight) < 0) blockState = Blocks.DIAMOND_ORE.defaultBlockState();
             }
-            else if (blockState.isOf(Blocks.DEEPSLATE)) {
+            else if (blockState.is(Blocks.DEEPSLATE)) {
                 int num = random.nextInt(stoneTotal);
-                if ((num = num - coalWeight) < 0) blockState = Blocks.DEEPSLATE_COAL_ORE.getDefaultState();
-                else if ((num = num - ironWeight) < 0) blockState = Blocks.DEEPSLATE_IRON_ORE.getDefaultState();
-                else if ((num = num - goldWeight) < 0) blockState = Blocks.DEEPSLATE_GOLD_ORE.getDefaultState();
-                else if ((num = num - copperWeight) < 0) blockState = Blocks.DEEPSLATE_COPPER_ORE.getDefaultState();
-                else if ((num = num - redstoneWeight) < 0) blockState = Blocks.DEEPSLATE_REDSTONE_ORE.getDefaultState();
-                else if ((num = num - lapisWeight) < 0) blockState = Blocks.DEEPSLATE_LAPIS_ORE.getDefaultState();
-                else if ((num = num - emeraldWeight) < 0) blockState = Blocks.DEEPSLATE_EMERALD_ORE.getDefaultState();
-                else if ((num - diamondWeight) < 0) blockState = Blocks.DEEPSLATE_DIAMOND_ORE.getDefaultState();
+                if ((num = num - coalWeight) < 0) blockState = Blocks.DEEPSLATE_COAL_ORE.defaultBlockState();
+                else if ((num = num - ironWeight) < 0) blockState = Blocks.DEEPSLATE_IRON_ORE.defaultBlockState();
+                else if ((num = num - goldWeight) < 0) blockState = Blocks.DEEPSLATE_GOLD_ORE.defaultBlockState();
+                else if ((num = num - copperWeight) < 0) blockState = Blocks.DEEPSLATE_COPPER_ORE.defaultBlockState();
+                else if ((num = num - redstoneWeight) < 0) blockState = Blocks.DEEPSLATE_REDSTONE_ORE.defaultBlockState();
+                else if ((num = num - lapisWeight) < 0) blockState = Blocks.DEEPSLATE_LAPIS_ORE.defaultBlockState();
+                else if ((num = num - emeraldWeight) < 0) blockState = Blocks.DEEPSLATE_EMERALD_ORE.defaultBlockState();
+                else if ((num - diamondWeight) < 0) blockState = Blocks.DEEPSLATE_DIAMOND_ORE.defaultBlockState();
             }
-            else if (blockState.isOf(Blocks.NETHERRACK)) {
+            else if (blockState.is(Blocks.NETHERRACK)) {
                 int num = random.nextInt(netherrackTotal);
-                if ((num = num - goldWeight) < 0) blockState = Blocks.NETHER_GOLD_ORE.getDefaultState();
-                else if ((num - quartzWeight) < 0) blockState = Blocks.NETHER_QUARTZ_ORE.getDefaultState();
+                if ((num = num - goldWeight) < 0) blockState = Blocks.NETHER_GOLD_ORE.defaultBlockState();
+                else if ((num - quartzWeight) < 0) blockState = Blocks.NETHER_QUARTZ_ORE.defaultBlockState();
             }
         }
 
         // Return new blockstate
-        return new Structure.StructureBlockInfo(blockPos, blockState, structureBlockInfo2.nbt);
+        return new StructureTemplate.StructureBlockInfo(blockPos, blockState, structureBlockInfo2.nbt);
     }
 
     @Override

@@ -4,8 +4,8 @@
   "package": "com.worldanchor.structures.mixin",
   "compatibilityLevel": "JAVA_16",
   "server": [
-    "NoiseChunkGeneratorMixin",
-    "StructureMixin"
+    "NoiseBasedChunkGeneratorMixin",
+    "StructureTemplateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

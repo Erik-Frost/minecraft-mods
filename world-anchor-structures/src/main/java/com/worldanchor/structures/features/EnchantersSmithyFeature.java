@@ -7,24 +7,23 @@ import com.worldanchor.structures.Utility;
 import com.worldanchor.structures.processors.ChestLootStructureProcessor;
 import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.RuinsStructureProcessor;
-import net.minecraft.block.Blocks;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.pool.StructurePools;
-import net.minecraft.structure.processor.StructureProcessorList;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.gen.ChunkRandom;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.Pools;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -33,47 +32,47 @@ import static com.worldanchor.structures.Server.MODID;
 import static com.worldanchor.structures.Utility.registerStructure;
 
 public class EnchantersSmithyFeature extends Utility.ModStructureFeature {
-    public static Identifier ID = new Identifier(MODID + ":enchanters-smithy");
+    public static ResourceLocation ID = new ResourceLocation(MODID + ":enchanters-smithy");
 
-    public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.add(
-            BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
+    public static final StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.register(
+            BuiltinRegistries.PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
                     Arrays.asList(
                             new RandomDeleteStructureProcessor(0.05f, true, Arrays.asList(
-                                    Blocks.CHEST.getDefaultState(), Blocks.ENCHANTING_TABLE.getDefaultState(),
-                                    Blocks.LAVA.getDefaultState(), Blocks.PURPLE_BED.getDefaultState(),
-                                    Blocks.CAMPFIRE.getDefaultState()
+                                    Blocks.CHEST.defaultBlockState(), Blocks.ENCHANTING_TABLE.defaultBlockState(),
+                                    Blocks.LAVA.defaultBlockState(), Blocks.PURPLE_BED.defaultBlockState(),
+                                    Blocks.CAMPFIRE.defaultBlockState()
                             )),
                             new ChestLootStructureProcessor(ID.getPath()),
                             new RuinsStructureProcessor(0.2F, 0F, 0.2F,0F)
                     )
             )
     );
-    public static StructurePool STRUCTURE_POOLS = StructurePools.register(new StructurePool(
-            ID, new Identifier("empty"),
+    public static StructureTemplatePool STRUCTURE_POOLS = Pools.register(new StructureTemplatePool(
+            ID, new ResourceLocation("empty"),
             ImmutableList.of(
                     // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                    Pair.of(StructurePoolElement.ofProcessedSingle(ID.toString(), PROCESSOR_LIST), 1)
+                    Pair.of(StructurePoolElement.single(ID.toString(), PROCESSOR_LIST), 1)
             ),
-            StructurePool.Projection.RIGID
+            StructureTemplatePool.Projection.RIGID
     ));
-    public static final StructureFeature<StructurePoolFeatureConfig> DEFAULT =
-            new EnchantersSmithyFeature(StructurePoolFeatureConfig.CODEC);
+    public static final StructureFeature<JigsawConfiguration> DEFAULT =
+            new EnchantersSmithyFeature(JigsawConfiguration.CODEC);
     static {
-        registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
+        registerStructure(ID, DEFAULT, GenerationStep.Decoration.STRONGHOLDS,
                 85,72,873452344, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID,
-                DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.getElementCount())));
+                DEFAULT.configured(new JigsawConfiguration(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.size())));
     }
 
 
-    public EnchantersSmithyFeature(Codec<StructurePoolFeatureConfig> codec) {
+    public EnchantersSmithyFeature(Codec<JigsawConfiguration> codec) {
         super(codec, ID);
     }
 
 
     @Override
     public @Nullable Utility.PlacementData shouldStartAt(ChunkGenerator generator, ChunkPos pos,
-            ChunkRandom random, HeightLimitView world, BlockRotation rotation) {
+            WorldgenRandom random, LevelHeightAccessor world, Rotation rotation) {
         int randomY = random.nextInt(40) - 60;
         BlockPos structurePos = TestStructureMask(generator, world, randomY, randomY+10, 5,
                 rotation, pos);

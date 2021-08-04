@@ -2,15 +2,15 @@ package com.worldanchor.structures.processors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.structure.Structure;
-import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.processor.StructureProcessor;
-import net.minecraft.structure.processor.StructureProcessorType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -35,16 +35,16 @@ public class ChestLootStructureProcessor extends StructureProcessor {
     // This method is called for each block in the structure
     @Nullable
     @Override
-    public Structure.StructureBlockInfo process(WorldView world, BlockPos pos, BlockPos pivot,
-            Structure.StructureBlockInfo structureBlockInfo, Structure.StructureBlockInfo structureBlockInfo2,
-            StructurePlacementData data) {
+    public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos pivot,
+            StructureTemplate.StructureBlockInfo structureBlockInfo, StructureTemplate.StructureBlockInfo structureBlockInfo2,
+            StructurePlaceSettings data) {
         BlockState bS = structureBlockInfo2.state;
-        if (bS.isOf(Blocks.CHEST) || bS.isOf(Blocks.TRAPPED_CHEST)) {
+        if (bS.is(Blocks.CHEST) || bS.is(Blocks.TRAPPED_CHEST)) {
             if (!structureBlockInfo.nbt.contains("LootTable")
-                    && Objects.equals(structureBlockInfo2.nbt.get("Items"), new NbtList()))
+                    && Objects.equals(structureBlockInfo2.nbt.get("Items"), new ListTag()))
                 structureBlockInfo2.nbt.putString("LootTable", MODID + ":chests/" + structurePath);
         }
-        return new Structure.StructureBlockInfo(structureBlockInfo2.pos, bS, structureBlockInfo2.nbt);
+        return new StructureTemplate.StructureBlockInfo(structureBlockInfo2.pos, bS, structureBlockInfo2.nbt);
     }
 
     @Override

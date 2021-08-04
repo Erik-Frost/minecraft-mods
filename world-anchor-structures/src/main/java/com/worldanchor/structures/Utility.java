@@ -1,32 +1,34 @@
 package com.worldanchor.structures;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.worldanchor.structures.mixin.StructureMixin;
+import com.worldanchor.structures.mixin.StructureTemplateMixin;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.structure.PoolStructurePiece;
-import net.minecraft.structure.Structure;
-import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructureStart;
-import net.minecraft.structure.pool.StructurePoolBasedGenerator;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.gen.ChunkRandom;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.StructureConfig;
-import net.minecraft.world.gen.chunk.VerticalBlockSample;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.JigsawFeature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.JigsawJunction;
+import net.minecraft.world.level.levelgen.feature.structures.JigsawPlacement;
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -34,12 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.worldanchor.structures.Server.MODID;
-import static net.minecraft.structure.Structure.transformAround;
 
 public class Utility {
 
-    public static <FC extends FeatureConfig, S extends StructureFeature<FC>> void registerStructure(Identifier id, S f,
-            GenerationStep.Feature step, int spacing, int separation, int salt, boolean adjustsSurface) {
+    public static <FC extends FeatureConfiguration, S extends StructureFeature<FC>> void registerStructure(ResourceLocation id, S f,
+            GenerationStep.Decoration step, int spacing, int separation, int salt, boolean adjustsSurface) {
         FabricStructureBuilder<FC, S> builder = FabricStructureBuilder.create(id, f)
                 .step(step)
                 .defaultConfig(spacing, separation, salt);
@@ -52,20 +53,22 @@ public class Utility {
 
     public static class PlacementData {
         public BlockPos blockPos;
-        public BlockRotation rotation;
+        public Rotation rotation;
+        
 
-        public PlacementData(BlockPos blockPos, BlockRotation rotation) {
+        public PlacementData(BlockPos blockPos, Rotation rotation) {
             this.blockPos = blockPos;
             this.rotation = rotation;
         }
     }
 
-    public static class ModStructureStart extends StructureStart<StructurePoolFeatureConfig> {
+
+    public static class ModStructureStart extends StructureStart<JigsawConfiguration> {
 
         PlacementData placementData;
         boolean surface;
 
-        public ModStructureStart(StructureFeature<StructurePoolFeatureConfig> feature, ChunkPos pos, int references, long seed) {
+        public ModStructureStart(StructureFeature<JigsawConfiguration> feature, ChunkPos pos, int references, long seed) {
             super(feature, pos, references, seed);
         }
 
@@ -75,51 +78,55 @@ public class Utility {
         }
 
         @Override
-        public void init(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator,
-                StructureManager manager, ChunkPos chunkPos, Biome biome, StructurePoolFeatureConfig config,
-                HeightLimitView world) {
+        public void generatePieces(RegistryAccess registryAccess, ChunkGenerator chunkGenerator,
+                StructureManager structureManager, ChunkPos chunkPos, Biome biome,
+                JigsawConfiguration featureConfiguration, LevelHeightAccessor levelHeightAccessor) {
             // Generate structure
-            StructurePoolBasedGenerator.generate(registryManager, config,
-                    (structureManager, structurePoolElement, pos, groundLevelData, blockRotation, boundingBox) ->
-                            new PoolStructurePiece(structureManager, structurePoolElement, pos, groundLevelData,
-                                    placementData.rotation, structurePoolElement.getBoundingBox(structureManager, pos, placementData.rotation)), chunkGenerator,
-                    manager, placementData.blockPos, this, random, false, surface, world);
+            JigsawPlacement.addPieces(registryAccess, featureConfiguration,
+                    (manager, structurePoolElement, pos, groundLevelData, Rotation, boundingBox) ->
+                            new PoolElementStructurePiece(manager, structurePoolElement, pos, groundLevelData,
+                                    placementData.rotation, structurePoolElement.getBoundingBox(manager, pos, placementData.rotation)), chunkGenerator,
+                    structureManager, placementData.blockPos, this, random, false, surface, levelHeightAccessor);
             // Makes bounding box encompass all structure pieces
-            setBoundingBoxFromChildren();
+            createBoundingBox();
         }
+
+
     }
 
 
 
-    public abstract static class ModStructureFeature extends StructureFeature<StructurePoolFeatureConfig> {
+    public abstract static class ModStructureFeature extends StructureFeature<JigsawConfiguration> {
 
-        public Map<Pair<Integer, Integer>, ArrayList<Structure.StructureBlockInfo>> maskBlockInfoList;
-        public final Identifier id;
+        public Map<Pair<Integer, Integer>, ArrayList<StructureTemplate.StructureBlockInfo>> maskBlockInfoList;
+        public final ResourceLocation id;
+        
 
-        public ModStructureFeature(Codec<StructurePoolFeatureConfig> codec, Identifier id) {
+        public ModStructureFeature(Codec<JigsawConfiguration> codec, ResourceLocation id) {
             super(codec);
             this.id = id;
         }
-        
+
+
         @Override
-        public StructureStartFactory<StructurePoolFeatureConfig> getStructureStartFactory() {
+        public StructureStartFactory<JigsawConfiguration> getStartFactory() {
             return ModStructureStart::new;
         }
 
         @Override
-        public StructureStart<?> tryPlaceStart(DynamicRegistryManager dynamicRegistryManager, ChunkGenerator generator,
-                BiomeSource biomeSource, StructureManager manager, long worldSeed, ChunkPos pos, Biome biome,
-                int referenceCount, ChunkRandom random, StructureConfig structureConfig, StructurePoolFeatureConfig config,
-                HeightLimitView world) {
-            ChunkPos chunkPos = this.getStartChunk(structureConfig, worldSeed, random, pos.x, pos.z);
+        public StructureStart<?> generate(RegistryAccess registryAccess, ChunkGenerator chunkGenerator,
+                BiomeSource biomeSource, StructureManager structureManager, long l, ChunkPos chunkPos, Biome biome,
+                int i, WorldgenRandom worldgenRandom, StructureFeatureConfiguration structureFeatureConfiguration,
+                JigsawConfiguration featureConfiguration, LevelHeightAccessor levelHeightAccessor) {
+            ChunkPos potentialChunkPos = this.getPotentialFeatureChunk(structureFeatureConfiguration, l, worldgenRandom, chunkPos.x, chunkPos.z);
             PlacementData placementData;
-            if (pos.x == chunkPos.x && pos.z == chunkPos.z) {
+            if (chunkPos.x == potentialChunkPos.x && chunkPos.z == potentialChunkPos.z) {
                 if (maskBlockInfoList == null) {
                     maskBlockInfoList = new HashMap<>();
-                    for (Structure.PalettedBlockInfoList palettedBlockInfoList :
-                            ((StructureMixin) manager.getStructure(new Identifier(MODID + ":" + id.getPath() + "-mask")).get()).getBlockInfoLists()) {
-                        for (Structure.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.getAll()) {
-                            if (!maskBlockInfo.state.isOf(Blocks.STRUCTURE_VOID)) {
+                    for (StructureTemplate.Palette palettedBlockInfoList :
+                            ((StructureTemplateMixin) structureManager.get(new ResourceLocation(MODID + ":" + id.getPath() + "-mask")).get()).getPalettes()) {
+                        for (StructureTemplate.StructureBlockInfo maskBlockInfo : palettedBlockInfoList.blocks()) {
+                            if (!maskBlockInfo.state.is(Blocks.STRUCTURE_VOID)) {
                                 Pair<Integer, Integer> coords = new Pair<>(maskBlockInfo.pos.getX(), maskBlockInfo.pos.getZ());
                                 if (!maskBlockInfoList.containsKey(coords)) maskBlockInfoList.put(coords, new ArrayList<>());
                                 maskBlockInfoList.get(coords).add(maskBlockInfo);
@@ -127,30 +134,31 @@ public class Utility {
                         }
                     }
                 }
-                for (BlockRotation rotation : BlockRotation.randomRotationOrder(random)) {
-                    if ((placementData = shouldStartAt(generator, pos, random, world, rotation)) != null) {
-                        ModStructureStart structureModStructureStart = (ModStructureStart) this.getStructureStartFactory().create(this, pos, referenceCount, worldSeed);
+                for (Rotation rotation : Rotation.getShuffled(worldgenRandom)) {
+                    if ((placementData = shouldStartAt(chunkGenerator, chunkPos, worldgenRandom, levelHeightAccessor, rotation)) != null) {
+                        ModStructureStart structureModStructureStart = (ModStructureStart) getStartFactory().create(this, chunkPos, i, l);
                         structureModStructureStart.setVariables(placementData, false);
-                        structureModStructureStart.init(dynamicRegistryManager, generator, manager, pos, biome, config, world);
-                        if (structureModStructureStart.hasChildren()) {
+                        structureModStructureStart.generatePieces(registryAccess, chunkGenerator, structureManager, chunkPos, biome, featureConfiguration, levelHeightAccessor);
+                        if (structureModStructureStart.isValid()) {
                             return structureModStructureStart;
                         }
                     }
                 }
             }
 
-            return StructureStart.DEFAULT;
+            return StructureStart.INVALID_START;
         }
 
 
         @Nullable
         public abstract PlacementData shouldStartAt(ChunkGenerator generator, ChunkPos pos,
-                ChunkRandom random, HeightLimitView world, BlockRotation rotation);
+                WorldgenRandom worldgenRandom, LevelHeightAccessor world, Rotation rotation);
 
-        public BlockPos TestStructureMask(ChunkGenerator generator, HeightLimitView world,
-                int yFrom, int yTo, int yIncrement, BlockRotation rotation, ChunkPos chunkPos) {
-            int startX = chunkPos.getStartX(), startZ = chunkPos.getStartZ();
-            Map<Pair<Integer, Integer>, VerticalBlockSample> verticalBlockSamples = new HashMap<>();
+
+        public BlockPos TestStructureMask(ChunkGenerator generator, LevelHeightAccessor world,
+                int yFrom, int yTo, int yIncrement, Rotation rotation, ChunkPos chunkPos) {
+            int startX = chunkPos.getMinBlockX(), startZ = chunkPos.getMinBlockZ();
+            Map<Pair<Integer, Integer>, NoiseColumn> noiseColumnHashMap = new HashMap<>();
             Pair<Integer, Integer> rotatedKey;
             boolean validPosition;
             for (int y = yFrom; y != yTo; y += yIncrement) {
@@ -158,17 +166,17 @@ public class Utility {
                 for (Pair<Integer, Integer> key : maskBlockInfoList.keySet()) {
                     // This rotation logic needs to match that in Structure.transformAround
                     rotatedKey = key;
-                    if (rotation == BlockRotation.COUNTERCLOCKWISE_90) rotatedKey = new Pair<>(startX - startZ + (key.getRight() + startZ), startX + startZ - (key.getLeft() + startX));
-                    else if (rotation == BlockRotation.CLOCKWISE_90) rotatedKey = new Pair<>(startX + startZ - (key.getRight() + startZ), startZ - startX + (key.getLeft() + startX));
-                    else if (rotation == BlockRotation.CLOCKWISE_180) rotatedKey = new Pair<>(startX + startX - (key.getLeft() + startX), startZ + startZ - (key.getRight() + startZ));
-                    if (!verticalBlockSamples.containsKey(rotatedKey)) verticalBlockSamples.put(rotatedKey,
-                            generator.getColumnSample(rotatedKey.getLeft(), rotatedKey.getRight(), world));
-                    for (Structure.StructureBlockInfo maskBlockInfo : maskBlockInfoList.get(key)) {
-                        BlockState worldBlockState = verticalBlockSamples.get(rotatedKey).getState(new BlockPos(0, maskBlockInfo.pos.getY() + y, 0));
+                    if (rotation == Rotation.COUNTERCLOCKWISE_90) rotatedKey = new Pair<>(startX - startZ + (key.getSecond() + startZ), startX + startZ - (key.getFirst() + startX));
+                    else if (rotation == Rotation.CLOCKWISE_90) rotatedKey = new Pair<>(startX + startZ - (key.getSecond() + startZ), startZ - startX + (key.getFirst() + startX));
+                    else if (rotation == Rotation.CLOCKWISE_180) rotatedKey = new Pair<>(startX + startX - (key.getFirst() + startX), startZ + startZ - (key.getSecond() + startZ));
+                    if (!noiseColumnHashMap.containsKey(rotatedKey)) noiseColumnHashMap.put(rotatedKey,
+                            generator.getBaseColumn(rotatedKey.getFirst(), rotatedKey.getSecond(), world));
+                    for (StructureTemplate.StructureBlockInfo maskBlockInfo : maskBlockInfoList.get(key)) {
+                        BlockState worldBlockState = noiseColumnHashMap.get(rotatedKey).getBlockState(new BlockPos(0, maskBlockInfo.pos.getY() + y, 0));
                         if ((maskBlockInfo.state.isAir() && !worldBlockState.isAir())
-                                || (maskBlockInfo.state.isOf(Blocks.BEDROCK) && (worldBlockState.isAir() || worldBlockState.isOf(Blocks.WATER) || worldBlockState.isOf(Blocks.LAVA)))
-                                || (maskBlockInfo.state.isOf(Blocks.LAVA) && !worldBlockState.isOf(Blocks.LAVA))
-                                || (maskBlockInfo.state.isOf(Blocks.WATER) && !worldBlockState.isOf(Blocks.WATER))) {
+                                || (maskBlockInfo.state.is(Blocks.BEDROCK) && (worldBlockState.isAir() || worldBlockState.is(Blocks.WATER) || worldBlockState.is(Blocks.LAVA)))
+                                || (maskBlockInfo.state.is(Blocks.LAVA) && !worldBlockState.is(Blocks.LAVA))
+                                || (maskBlockInfo.state.is(Blocks.WATER) && !worldBlockState.is(Blocks.WATER))) {
                             validPosition = false;
                             break;
                         }

@@ -7,25 +7,24 @@ import com.worldanchor.structures.Utility;
 import com.worldanchor.structures.processors.BiomeStructureProcessor;
 import com.worldanchor.structures.processors.RandomDeleteStructureProcessor;
 import com.worldanchor.structures.processors.ReplaceBlocksStructureProcessor;
-import net.minecraft.block.Blocks;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.pool.StructurePools;
-import net.minecraft.structure.processor.StructureProcessorList;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.gen.ChunkRandom;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.Pools;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -34,61 +33,61 @@ import static com.worldanchor.structures.Server.MODID;
 import static com.worldanchor.structures.Utility.registerStructure;
 
 public class GiantBeehiveFeature extends Utility.ModStructureFeature {
-    public static Identifier ID = new Identifier(MODID + ":giant-beehive");
+    public static ResourceLocation ID = new ResourceLocation(MODID + ":giant-beehive");
 
-    public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.add(
-            BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
+    public static final StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.register(
+            BuiltinRegistries.PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
                     Arrays.asList(
                             new RandomDeleteStructureProcessor(0.05f, false, Arrays.asList(
-                                    Blocks.OAK_PLANKS.getDefaultState()
+                                    Blocks.OAK_PLANKS.defaultBlockState()
                             )),
-                            new ReplaceBlocksStructureProcessor(Arrays.asList(Blocks.YELLOW_CONCRETE.getDefaultState()),
-                                    Arrays.asList(new Pair<>("7", Blocks.HONEY_BLOCK.getDefaultState()),
-                                            new Pair<>("20", Blocks.HONEYCOMB_BLOCK.getDefaultState()),
-                                            new Pair<>("2", Blocks.RAW_GOLD_BLOCK.getDefaultState()),
-                                            new Pair<>("1", Blocks.GLOWSTONE.getDefaultState())
+                            new ReplaceBlocksStructureProcessor(Arrays.asList(Blocks.YELLOW_CONCRETE.defaultBlockState()),
+                                    Arrays.asList(new Pair<>("7", Blocks.HONEY_BLOCK.defaultBlockState()),
+                                            new Pair<>("20", Blocks.HONEYCOMB_BLOCK.defaultBlockState()),
+                                            new Pair<>("2", Blocks.RAW_GOLD_BLOCK.defaultBlockState()),
+                                            new Pair<>("1", Blocks.GLOWSTONE.defaultBlockState())
                                     )
                             ),
                             new BiomeStructureProcessor(true)
                     )
             )
     );
-    public static StructurePool STRUCTURE_POOLS = StructurePools.register(new StructurePool(
-            ID, new Identifier("empty"),
+    public static StructureTemplatePool STRUCTURE_POOLS = Pools.register(new StructureTemplatePool(
+            ID, new ResourceLocation("empty"),
             ImmutableList.of(
                     // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                    Pair.of(StructurePoolElement.ofProcessedSingle(ID.toString(), PROCESSOR_LIST), 1)
+                    Pair.of(StructurePoolElement.single(ID.toString(), PROCESSOR_LIST), 1)
             ),
-            StructurePool.Projection.RIGID
+            StructureTemplatePool.Projection.RIGID
     ));
-    public static final StructureFeature<StructurePoolFeatureConfig> DEFAULT =
-            new GiantBeehiveFeature(StructurePoolFeatureConfig.CODEC);
+    public static final StructureFeature<JigsawConfiguration> DEFAULT =
+            new GiantBeehiveFeature(JigsawConfiguration.CODEC);
     static {
-        StructurePools.register(new StructurePool(
-                new Identifier(MODID + ":entity/bee"), new Identifier("empty"),
+        Pools.register(new StructureTemplatePool(
+                new ResourceLocation(MODID + ":entity/bee"), new ResourceLocation("empty"),
                 ImmutableList.of(
                         // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                        Pair.of(StructurePoolElement.ofSingle(MODID + ":entity/bee"), 1)
+                        Pair.of(StructurePoolElement.single(MODID + ":entity/bee"), 1)
                 ),
-                StructurePool.Projection.RIGID
+                StructureTemplatePool.Projection.RIGID
         ));
-        registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
+        registerStructure(ID, DEFAULT, GenerationStep.Decoration.STRONGHOLDS,
                 64,60,634523774, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID,
-                DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.getElementCount())));
+                DEFAULT.configured(new JigsawConfiguration(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.size())));
     }
 
 
-    public GiantBeehiveFeature(Codec<StructurePoolFeatureConfig> codec) {
+    public GiantBeehiveFeature(Codec<JigsawConfiguration> codec) {
         super(codec, ID);
     }
 
     @Override
     public @Nullable Utility.PlacementData shouldStartAt(ChunkGenerator generator, ChunkPos pos,
-            ChunkRandom random, HeightLimitView world, BlockRotation rotation) {
+            WorldgenRandom random, LevelHeightAccessor world, Rotation rotation) {
         BlockPos structurePos = TestStructureMask(generator, world,
-                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) - 30,
-                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) - 10, 1, rotation, pos);
+                generator.getBaseHeight(pos.getMinBlockX(), pos.getMinBlockZ(), Heightmap.Types.WORLD_SURFACE_WG, world) - 30,
+                generator.getBaseHeight(pos.getMinBlockX(), pos.getMinBlockZ(), Heightmap.Types.WORLD_SURFACE_WG, world) - 10, 1, rotation, pos);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
     }

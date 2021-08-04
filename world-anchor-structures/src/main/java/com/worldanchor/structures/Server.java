@@ -4,10 +4,10 @@ import com.worldanchor.structures.features.*;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 
 @SuppressWarnings("deprecation")
 public class Server implements DedicatedServerModInitializer {
@@ -15,33 +15,34 @@ public class Server implements DedicatedServerModInitializer {
 
     @Override
     public void onInitializeServer() {
+
         // Add Structures and features to biomes
-        BiomeModifications.addStructure(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, AlchemistLabFeature.ID));
+        BiomeModifications.addStructure(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, AlchemistLabFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld(),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, EnchantersSmithyFeature.ID));
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, EnchantersSmithyFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld()
-                        .and(BiomeSelectors.categories(Biome.Category.OCEAN, Biome.Category.BEACH, Biome.Category.RIVER).negate()),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, EnderObeliskFeature.ID));
-        BiomeModifications.addStructure(BiomeSelectors.includeByKey(BiomeKeys.NETHER_WASTES),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, GhastTowerFeature.ID));
+                        .and(BiomeSelectors.categories(Biome.BiomeCategory.OCEAN, Biome.BiomeCategory.BEACH, Biome.BiomeCategory.RIVER).negate()),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, EnderObeliskFeature.ID));
+        BiomeModifications.addStructure(BiomeSelectors.includeByKey(Biomes.NETHER_WASTES),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, GhastTowerFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld()
-                        .and(BiomeSelectors.categories(Biome.Category.FOREST, Biome.Category.JUNGLE, Biome.Category.SAVANNA, Biome.Category.TAIGA))
-                        .and(BiomeSelectors.categories(Biome.Category.BEACH, Biome.Category.RIVER).negate()),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, GiantBeehiveFeature.ID));
+                        .and(BiomeSelectors.categories(Biome.BiomeCategory.FOREST, Biome.BiomeCategory.JUNGLE, Biome.BiomeCategory.SAVANNA, Biome.BiomeCategory.TAIGA))
+                        .and(BiomeSelectors.categories(Biome.BiomeCategory.BEACH, Biome.BiomeCategory.RIVER).negate()),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, GiantBeehiveFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld()
-                        .and(BiomeSelectors.categories(Biome.Category.FOREST, Biome.Category.JUNGLE, Biome.Category.SAVANNA, Biome.Category.TAIGA))
-                        .and(BiomeSelectors.categories(Biome.Category.BEACH, Biome.Category.RIVER).negate()),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, HuntersRespiteFeature.ID));
+                        .and(BiomeSelectors.categories(Biome.BiomeCategory.FOREST, Biome.BiomeCategory.JUNGLE, Biome.BiomeCategory.SAVANNA, Biome.BiomeCategory.TAIGA))
+                        .and(BiomeSelectors.categories(Biome.BiomeCategory.BEACH, Biome.BiomeCategory.RIVER).negate()),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, HuntersRespiteFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld(),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, SilverfishNestFeature.ID));
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, SilverfishNestFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInOverworld()
-                        .and(BiomeSelectors.categories(Biome.Category.OCEAN, Biome.Category.BEACH, Biome.Category.RIVER).negate()),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, SmugglersCacheFeature.ID));
-        BiomeModifications.addStructure(BiomeSelectors.categories(Biome.Category.SWAMP),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, WitchHouseFeature.ID));
+                        .and(BiomeSelectors.categories(Biome.BiomeCategory.OCEAN, Biome.BiomeCategory.BEACH, Biome.BiomeCategory.RIVER).negate()),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, SmugglersCacheFeature.ID));
+        BiomeModifications.addStructure(BiomeSelectors.categories(Biome.BiomeCategory.SWAMP),
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, WitchHouseFeature.ID));
         BiomeModifications.addStructure(BiomeSelectors.foundInTheNether(),
-                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, WitherSkeletonShipFeature.ID));
+                ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, WitherSkeletonShipFeature.ID));
 
     }
 }

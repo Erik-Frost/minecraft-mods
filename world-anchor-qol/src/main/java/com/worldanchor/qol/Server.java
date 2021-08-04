@@ -4,19 +4,13 @@ import com.mojang.brigadier.Command;
 import com.worldanchor.qol.mixin.ServerWorldAccessor;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 import java.util.Random;
-
-import static net.minecraft.server.command.CommandManager.literal;
 
 public class Server implements DedicatedServerModInitializer {
     public static final String MODID = "world-anchor-qol";
@@ -52,7 +46,8 @@ public class Server implements DedicatedServerModInitializer {
         List<Entity> passengers = player.getPassengerList();
         Random random = new Random();
         // Spawn particles at old location
-        ParticleS2CPacket particleS2CPacket = new ParticleS2CPacket(ParticleTypes.PORTAL, true, player.getX(), player.getY() + random.nextDouble() * 2.0D, player.getZ(), (float)random.nextGaussian(), 0.0f, (float)random.nextGaussian(), 1, 100);
+        ParticleS2CPacket particleS2CPacket = new ParticleS2CPacket(
+                ParticleTypes.PORTAL, true, player.getX(), player.getY() + random.nextDouble() * 2.0D, player.getZ(), (float)random.nextGaussian(), 0.0f, (float)random.nextGaussian(), 1, 100);
         for(int i = 0; i < world.getPlayers().size(); ++i) {
             ((ServerWorldAccessor)world).sendToPlayerIfNearby(world.getPlayers().get(i), true, player.getX(), player.getY(), player.getZ(), particleS2CPacket);
         }

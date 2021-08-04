@@ -6,24 +6,23 @@ import com.mojang.serialization.Codec;
 import com.worldanchor.structures.Utility;
 import com.worldanchor.structures.processors.ChestLootStructureProcessor;
 import com.worldanchor.structures.processors.RuinsStructureProcessor;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.pool.StructurePools;
-import net.minecraft.structure.processor.StructureProcessorList;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.gen.ChunkRandom;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.Pools;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -32,52 +31,52 @@ import static com.worldanchor.structures.Server.MODID;
 import static com.worldanchor.structures.Utility.registerStructure;
 
 public class SmugglersCacheFeature extends Utility.ModStructureFeature {
-    public static Identifier ID = new Identifier(MODID + ":smugglers-cache");
+    public static ResourceLocation ID = new ResourceLocation(MODID + ":smugglers-cache");
 
-    public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.add(
-            BuiltinRegistries.STRUCTURE_PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
+    public static StructureProcessorList PROCESSOR_LIST = BuiltinRegistries.register(
+            BuiltinRegistries.PROCESSOR_LIST, ID + "-processor-list", new StructureProcessorList(
                     Arrays.asList(
                             new ChestLootStructureProcessor(ID.getPath()),
                             new RuinsStructureProcessor(0.1F, 0.4F, 0.1F,0F)
                     )
             )
     );
-    public static StructurePool STRUCTURE_POOLS = StructurePools.register(new StructurePool(
-            ID, new Identifier("empty"),
+    public static StructureTemplatePool STRUCTURE_POOLS = Pools.register(new StructureTemplatePool(
+            ID, new ResourceLocation("empty"),
             ImmutableList.of(
                     // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                    Pair.of(StructurePoolElement.ofProcessedSingle(ID.toString(), PROCESSOR_LIST), 1)
+                    Pair.of(StructurePoolElement.single(ID.toString(), PROCESSOR_LIST), 1)
             ),
-            StructurePool.Projection.RIGID
+            StructureTemplatePool.Projection.RIGID
     ));
-    public static final StructureFeature<StructurePoolFeatureConfig> DEFAULT =
-            new SmugglersCacheFeature(StructurePoolFeatureConfig.CODEC);
+    public static final StructureFeature<JigsawConfiguration> DEFAULT =
+            new SmugglersCacheFeature(JigsawConfiguration.CODEC);
     static {
-        StructurePools.register(new StructurePool(
-                new Identifier(MODID + ":entity/undead-horse"), new Identifier("empty"),
+        Pools.register(new StructureTemplatePool(
+                new ResourceLocation(MODID + ":entity/undead-horse"), new ResourceLocation("empty"),
                 ImmutableList.of(
                         // Use ofProcessedSingle to add processors or just ofSingle to add elements without processors
-                        Pair.of(StructurePoolElement.ofSingle(MODID + ":entity/skeleton-horse"), 1),
-                        Pair.of(StructurePoolElement.ofSingle(MODID + ":entity/zombie-horse"), 1)
+                        Pair.of(StructurePoolElement.single(MODID + ":entity/skeleton-horse"), 1),
+                        Pair.of(StructurePoolElement.single(MODID + ":entity/zombie-horse"), 1)
                 ),
-                StructurePool.Projection.RIGID
+                StructureTemplatePool.Projection.RIGID
         ));
-        registerStructure(ID, DEFAULT, GenerationStep.Feature.STRONGHOLDS,
+        registerStructure(ID, DEFAULT, GenerationStep.Decoration.STRONGHOLDS,
                 70,54,568234126, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID,
-                DEFAULT.configure(new StructurePoolFeatureConfig(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.getElementCount())));
+                DEFAULT.configured(new JigsawConfiguration(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.size())));
     }
 
-    public SmugglersCacheFeature(Codec<StructurePoolFeatureConfig> codec) {
+    public SmugglersCacheFeature(Codec<JigsawConfiguration> codec) {
         super(codec, ID);
     }
 
     @Override
     public @Nullable Utility.PlacementData shouldStartAt(ChunkGenerator generator, ChunkPos pos,
-            ChunkRandom random, HeightLimitView world, BlockRotation rotation) {
+            WorldgenRandom random, LevelHeightAccessor world, Rotation rotation) {
         BlockPos structurePos = TestStructureMask(generator, world,
-                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) - 40,
-                generator.getHeightOnGround(pos.getStartX(), pos.getStartZ(), Heightmap.Type.WORLD_SURFACE_WG, world) + 10, 1, rotation, pos);
+                generator.getBaseHeight(pos.getMinBlockX(), pos.getMinBlockZ(), Heightmap.Types.WORLD_SURFACE_WG, world) - 40,
+                generator.getBaseHeight(pos.getMinBlockX(), pos.getMinBlockZ(), Heightmap.Types.WORLD_SURFACE_WG, world) + 10, 1, rotation, pos);
         if (structurePos == null) return null;
         else return new Utility.PlacementData(structurePos, rotation);
     }

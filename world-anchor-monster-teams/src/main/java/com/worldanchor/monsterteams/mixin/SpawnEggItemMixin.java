@@ -51,7 +51,7 @@ public abstract class SpawnEggItemMixin {
         if (world instanceof ServerWorld) {
             BlockPos blockPos = context.getBlockPos();
             BlockState blockState = world.getBlockState(blockPos);
-            if (blockState.isOf(Blocks.SPAWNER)) {
+            if (blockState.is(Blocks.SPAWNER)) {
                 BlockEntity blockEntity = world.getBlockEntity(blockPos);
                 if (blockEntity instanceof MobSpawnerBlockEntity) {
                     MobSpawnerLogic mobSpawnerLogic = ((MobSpawnerBlockEntity)blockEntity).getLogic();
