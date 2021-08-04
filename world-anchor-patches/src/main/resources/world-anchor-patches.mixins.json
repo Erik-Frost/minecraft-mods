@@ -4,7 +4,7 @@
   "package": "com.worldanchor.patches.mixin",
   "compatibilityLevel": "JAVA_16",
   "server": [
-    "ServerPlayNetworkHandlerMixin"
+    "ServerGamePacketListenerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1
