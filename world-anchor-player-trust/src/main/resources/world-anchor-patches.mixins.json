@@ -1,11 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.worldanchor.qol.mixin",
+  "package": "com.worldanchor.patches.mixin",
   "compatibilityLevel": "JAVA_16",
-  "server": [
-    "ServerPlayerMixin",
-    "ServerLevelAccessor"
+  "mixins": [
+    "ServerGamePacketListenerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1

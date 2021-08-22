@@ -1,8 +1,8 @@
 package com.worldanchor.monsterteams.mixin;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.scoreboard.AbstractTeam;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.scores.Team;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-    @Shadow @Nullable public abstract AbstractTeam getScoreboardTeam();
+    @Shadow @Nullable public abstract Team getTeam();
 
-    @Inject(method = "writeNbt", at = @At("HEAD"))
-    void injectMethod(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (getScoreboardTeam() != null) {
-            nbt.putString("Team", getScoreboardTeam().getName());
+    @Inject(method = "saveWithoutId", at = @At("HEAD"))
+    void injectMethod(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
+        if (getTeam() != null) {
+            tag.putString("Team", getTeam().getName());
         }
     }
 }

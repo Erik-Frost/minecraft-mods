@@ -1,23 +1,23 @@
 package com.worldanchor.monsterteams.mixin;
 
 import com.worldanchor.monsterteams.TeamUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.MobSpawnerBlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.MobSpawnerLogic;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,39 +27,39 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SpawnEggItem.class)
 public abstract class SpawnEggItemMixin {
 
-    @Redirect(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;spawnFromItemStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/SpawnReason;ZZ)Lnet/minecraft/entity/Entity;"))
-    Entity redirectUseSpawnMethod(EntityType entityType, ServerWorld serverWorld, ItemStack stack, PlayerEntity player, BlockPos pos, SpawnReason spawnReason, boolean alignPosition, boolean invertY) {
-        Entity entity = entityType.spawnFromItemStack(serverWorld, stack, player, pos, SpawnReason.SPAWN_EGG, false, false);
-        if (entity instanceof LivingEntity && player.getScoreboardTeam() != null) {
-            TeamUtil.addToTeamHelper((LivingEntity) entity, player.getScoreboardTeam().getName());
+    @Redirect(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;"))
+    Entity redirectUseSpawnMethod(EntityType entityType, ServerLevel ServerLevel, ItemStack stack, Player player, BlockPos pos, MobSpawnType mobSpawnType, boolean alignPosition, boolean invertY) {
+        Entity entity = entityType.spawn(ServerLevel, stack, player, pos, MobSpawnType.SPAWN_EGG, false, false);
+        if (entity instanceof LivingEntity && player.getTeam() != null) {
+            TeamUtil.addToTeamHelper((LivingEntity) entity, player.getTeam().getName());
         }
         return entity;
     }
 
-    @Redirect(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;spawnFromItemStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/SpawnReason;ZZ)Lnet/minecraft/entity/Entity;"))
-    Entity redirectUseOnBlockSpawnMethod(EntityType entityType, ServerWorld serverWorld, ItemStack stack, PlayerEntity player, BlockPos pos, SpawnReason spawnReason, boolean alignPosition, boolean invertY) {
-        Entity entity = entityType.spawnFromItemStack(serverWorld, stack, player, pos, SpawnReason.SPAWN_EGG, false, false);
-        if (entity instanceof LivingEntity && player.getScoreboardTeam() != null) {
-            TeamUtil.addToTeamHelper((LivingEntity) entity, player.getScoreboardTeam().getName());
+    @Redirect(method = "useOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;"))
+    Entity redirectUseOnBlockSpawnMethod(EntityType entityType, ServerLevel ServerLevel, ItemStack stack, Player player, BlockPos pos, MobSpawnType mobSpawnType, boolean alignPosition, boolean invertY) {
+        Entity entity = entityType.spawn(ServerLevel, stack, player, pos, MobSpawnType.SPAWN_EGG, false, false);
+        if (entity instanceof LivingEntity && player.getTeam() != null) {
+            TeamUtil.addToTeamHelper((LivingEntity) entity, player.getTeam().getName());
         }
         return entity;
     }
 
-    @Inject(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/MobSpawnerBlockEntity;getLogic()Lnet/minecraft/world/MobSpawnerLogic;"))
-    void injectChangeSpawnerTeam(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        World world = context.getWorld();
-        if (world instanceof ServerWorld) {
-            BlockPos blockPos = context.getBlockPos();
+    @Inject(method = "useOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/SpawnerBlockEntity;getSpawner()Lnet/minecraft/world/level/BaseSpawner;"))
+    void injectChangeSpawnerTeam(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
+        Level world = context.getLevel();
+        if (world instanceof ServerLevel) {
+            BlockPos blockPos = context.getClickedPos();
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.is(Blocks.SPAWNER)) {
                 BlockEntity blockEntity = world.getBlockEntity(blockPos);
-                if (blockEntity instanceof MobSpawnerBlockEntity) {
-                    MobSpawnerLogic mobSpawnerLogic = ((MobSpawnerBlockEntity)blockEntity).getLogic();
-                    if (((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityNbt().contains("Team")) {
-                        ((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityNbt().remove("Team");
+                if (blockEntity instanceof SpawnerBlockEntity) {
+                    BaseSpawner baseSpawner = ((SpawnerBlockEntity)blockEntity).getSpawner();
+                    if (((BaseSpawnerAccessor) baseSpawner).getNextSpawnData().getTag().contains("Team")) {
+                        ((BaseSpawnerAccessor) baseSpawner).getNextSpawnData().getTag().remove("Team");
                     }
-                    if (context.getPlayer() != null && context.getPlayer().getScoreboardTeam() != null) {
-                        ((MobSpawnerLogicAccessor) mobSpawnerLogic).getMobSpawnEntry().getEntityNbt().putString("Team", context.getPlayer().getScoreboardTeam().getName());
+                    if (context.getPlayer() != null && context.getPlayer().getTeam() != null) {
+                        ((BaseSpawnerAccessor) baseSpawner).getNextSpawnData().getTag().putString("Team", context.getPlayer().getTeam().getName());
                     }
 
                     //blockEntity.markDirty();

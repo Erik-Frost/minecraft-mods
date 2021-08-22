@@ -15,13 +15,11 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="delegatedBuild" value="false" />
-        <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-patches" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/world-anchor-patches" />
+            <option value="$PROJECT_DIR$/world-anchor-player-trust" />
           </set>
         </option>
       </GradleProjectSettings>

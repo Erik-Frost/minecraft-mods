@@ -1,20 +1,20 @@
 package com.worldanchor.monsterteams.mixin;
 
 import com.worldanchor.monsterteams.TeamUtil;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.VexEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Vex;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(VexEntity.class)
+@Mixin(Vex.class)
 public abstract class VexEntityMixin {
 
     @Inject(method = "setOwner", at = @At("HEAD"))
-    void injectMethod(MobEntity owner, CallbackInfo ci) {
-        if (owner.getScoreboardTeam() != null) {
-            TeamUtil.addToTeamHelper((VexEntity) (Object) this, owner.getScoreboardTeam().getName());
+    void injectMethod(Mob owner, CallbackInfo ci) {
+        if (owner.getTeam() != null) {
+            TeamUtil.addToTeamHelper((Vex) (Object) this, owner.getTeam().getName());
         }
     }
 

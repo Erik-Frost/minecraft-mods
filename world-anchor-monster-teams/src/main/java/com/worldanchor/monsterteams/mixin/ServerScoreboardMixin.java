@@ -1,13 +1,14 @@
 package com.worldanchor.monsterteams.mixin;
 
 import com.worldanchor.monsterteams.TeamUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.scoreboard.ServerScoreboard;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.ServerScoreboard;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,12 +24,12 @@ public abstract class ServerScoreboardMixin {
 
     @Shadow @Final private MinecraftServer server;
 
-    @Inject(method = "addPlayerToTeam", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
-    void injectAddPlayerToTeam(String name, Team team, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "addPlayerToTeam", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerList()Lnet/minecraft/server/players/PlayerList;"))
+    void injectAddPlayerToTeam(String name, PlayerTeam playerTeam, CallbackInfoReturnable<Boolean> cir) {
         if (name.length() > 16) {
             // Is non player entity
             Entity entity = null;
-            for (ServerWorld world : server.getWorlds()) {
+            for (ServerLevel world : server.getAllLevels()) {
                 // For each world
                 entity = world.getEntity(UUID.fromString(name));
                 if (entity instanceof LivingEntity) {
@@ -42,20 +43,19 @@ public abstract class ServerScoreboardMixin {
         }
     }
 
-    @Inject(method = "removePlayerFromTeam", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerManager()Lnet/minecraft/server/PlayerManager;"))
-    void injectRemovePlayerFromTeam(String name, Team team, CallbackInfo ci) {
+    @Inject(method = "removePlayerFromTeam", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getPlayerList()Lnet/minecraft/server/players/PlayerList;"))
+    void injectRemovePlayerFromTeam(String name, PlayerTeam playerTeam, CallbackInfo ci) {
         if (name.length() > 16) {
             // Is non player entity
             Entity entity = null;
-            for (ServerWorld world : server.getWorlds()) {
+            for (ServerLevel world : server.getAllLevels()) {
                 // For each world
                 entity = world.getEntity(UUID.fromString(name));
-                if (entity instanceof LivingEntity) {
-                    LivingEntity livingEntity = (LivingEntity) entity;
+                if (entity instanceof LivingEntity livingEntity) {
                     // Turn off name tag always display
                     livingEntity.setCustomNameVisible(false);
                     // Remove team goals from mobEntity
-                    if (livingEntity instanceof MobEntity) TeamUtil.removeTeamGoals((MobEntity) livingEntity);
+                    if (livingEntity instanceof Mob) TeamUtil.removeTeamGoals((Mob) livingEntity);
                     break;
                 }
             }

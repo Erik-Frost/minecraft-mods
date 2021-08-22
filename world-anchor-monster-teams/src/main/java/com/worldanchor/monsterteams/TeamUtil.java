@@ -1,27 +1,32 @@
 package com.worldanchor.monsterteams;
 
 import com.worldanchor.monsterteams.mixin.GoalSelectorAccessor;
-import com.worldanchor.monsterteams.mixin.MobEntityAccessor;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.PathNodeType;
-import net.minecraft.entity.mob.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BannerItem;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ServerScoreboard;
-import net.minecraft.scoreboard.Team;
+import com.worldanchor.monsterteams.mixin.MobAccessor;
+import com.worldanchor.monsterteams.mixin.NearestAttackableTargetGoalAccessor;
+import com.worldanchor.monsterteams.mixin.TargetingConditionsAccessor;
+import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.server.ServerScoreboard;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.Team;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -35,86 +40,60 @@ public class TeamUtil {
         // Display name based on gamerule
         displayNameBasedOnGamerule(livingEntity);
         // Add team goals
-        if (livingEntity instanceof MobEntity) addTeamGoals((MobEntity) livingEntity);
+        if (livingEntity instanceof Mob) addTeamGoals((Mob) livingEntity);
     }
 
-    public static void removeTeamGoals(MobEntity mobEntity) {
+    public static void removeTeamGoals(Mob mobEntity) {
         // Get goals to remove
-        List<PrioritizedGoal> toRemove = new ArrayList<>();
-        for (PrioritizedGoal prioritizedGoal :
-                ((GoalSelectorAccessor) ((MobEntityAccessor) mobEntity).getTargetSelector()).getGoals()) {
+        List<WrappedGoal> toRemove = new ArrayList<>();
+        for (WrappedGoal prioritizedGoal :
+                ((GoalSelectorAccessor) ((MobAccessor) mobEntity).getTargetSelector()).getGoals()) {
             if (prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal
-                    && (((NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal()).livingEntityPredicate
+                    && (((TargetingConditionsAccessor)((NearestAttackableTargetGoalAccessor)prioritizedGoal.getGoal()).getTargetConditions()).getSelector()
                                 instanceof notOnTeamAndHostileExceptCreeperEntityPredicate
-                    || ((NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal()).livingEntityPredicate
+                    || ((TargetingConditionsAccessor)((NearestAttackableTargetGoalAccessor)prioritizedGoal.getGoal()).getTargetConditions()).getSelector()
                                 instanceof OnTeamEntityPredicate)) {
                 toRemove.add(prioritizedGoal);
             }
-            else if (prioritizedGoal.getGoal() instanceof FollowLivingEntityGoal) toRemove.add(prioritizedGoal);
         }
         // Remove goals
-        for (PrioritizedGoal prioritizedGoal : toRemove) {
-            ((MobEntityAccessor) mobEntity).getTargetSelector().remove(prioritizedGoal.getGoal());
+        for (WrappedGoal prioritizedGoal : toRemove) {
+            ((MobAccessor) mobEntity).getTargetSelector().removeGoal(prioritizedGoal.getGoal());
         }
     }
 
 
-    public static void addTeamGoals(MobEntity mobEntity) {
+    public static void addTeamGoals(Mob mobEntity) {
         // Add attack goals
-        ((MobEntityAccessor) mobEntity).getTargetSelector().add(2,
+        ((MobAccessor) mobEntity).getTargetSelector().addGoal(2,
                 new NearestAttackableTargetGoal<>(mobEntity, LivingEntity.class,
                         5,false, false,
                         new OnTeamEntityPredicate()));
-        ((MobEntityAccessor) mobEntity).getTargetSelector().add(3,
+        ((MobAccessor) mobEntity).getTargetSelector().addGoal(3,
                 new NearestAttackableTargetGoal<>(mobEntity, LivingEntity.class,
                         5,false, false,
                         new notOnTeamAndHostileExceptCreeperEntityPredicate()));
-        if (mobEntity instanceof HostileEntity) {
-            ((MobEntityAccessor) mobEntity).getGoalSelector().add(0,
-                    new FollowLivingEntityGoal(mobEntity, (livingEntity) -> {
-                        return livingEntity.getScoreboardTeam() == mobEntity.getScoreboardTeam()
-                                && livingEntity.isInvisible() == mobEntity.isInvisible()
-                                && (livingEntity instanceof PlayerEntity && !((PlayerEntity)livingEntity).isCreative()
-                                    && !livingEntity.isSpectator() && livingEntity.isSneaking())
-                                && livingEntity.getOffHandStack().getItem() instanceof BannerItem;
-                    },1d, mobEntity.getRandom().nextInt(4) + 3,16, true));
-            ((MobEntityAccessor) mobEntity).getGoalSelector().add(1,
-                    new FollowLivingEntityGoal(mobEntity, (livingEntity) -> {
-                        return livingEntity.getScoreboardTeam() == mobEntity.getScoreboardTeam()
-                                && livingEntity.isInvisible() == mobEntity.isInvisible()
-                                && (livingEntity instanceof PlayerEntity && !((PlayerEntity)livingEntity).isCreative()
-                                    && !livingEntity.isSpectator())
-                                && livingEntity.getOffHandStack().getItem() instanceof BannerItem;
-                    },1d, mobEntity.getRandom().nextInt(4) + 5,32, false));
-            ((MobEntityAccessor) mobEntity).getGoalSelector().add(8,
-                    new FollowLivingEntityGoal(mobEntity, (livingEntity) -> {
-                        return livingEntity.getScoreboardTeam() == mobEntity.getScoreboardTeam()
-                                && livingEntity.isInvisible() == mobEntity.isInvisible()
-                                && (livingEntity instanceof PlayerEntity && !((PlayerEntity)livingEntity).isCreative()
-                                && !livingEntity.isSpectator());
-                    },1d, mobEntity.getRandom().nextInt(4) + 7,48, false));
-        }
     }
 
     public static void displayNameBasedOnGamerule(LivingEntity livingEntity) {
         // Turn on name tag if rule is set to
         livingEntity.setCustomNameVisible(
-                livingEntity.getEntityWorld().getGameRules().getBoolean(Server.DISPLAY_TEAM_NAME_TAGS));
+                livingEntity.level.getGameRules().getBoolean(Server.DISPLAY_TEAM_NAME_TAGS));
 
     }
 
-    public static ArrayList<MobEntity> getMobEntitiesOnTeam(Team team, MinecraftServer server) {
-        ArrayList<MobEntity> mobEntities = new ArrayList<>();
-        for (String string : team.getPlayerList()) {
+    public static ArrayList<Mob> getMobEntitiesOnTeam(Team team, MinecraftServer server) {
+        ArrayList<Mob> mobEntities = new ArrayList<>();
+        for (String string : team.getPlayers()) {
             // Add entity to collection
             if (string.length() > 16) {
                 // Is non player entity
                 Entity entity = null;
-                for (ServerWorld world : server.getWorlds()) {
+                for (ServerLevel level : server.getAllLevels()) {
                     // For each world
-                    entity = world.getEntity(UUID.fromString(string));
-                    if (entity instanceof MobEntity) {
-                        mobEntities.add((MobEntity)entity);
+                    entity = level.getEntity(UUID.fromString(string));
+                    if (entity instanceof Mob) {
+                        mobEntities.add((Mob)entity);
                         break;
                     }
                 }
@@ -124,15 +103,15 @@ public class TeamUtil {
     }
 
     public static void removeFromTeamHelper(LivingEntity livingEntity) {
-        if (livingEntity.getScoreboardTeam() != null) {
+        if (livingEntity.getTeam() != null) {
             // Get serverScoreboard
             ServerScoreboard scoreboard = Objects.requireNonNull(livingEntity.getServer()).getScoreboard();
             // Remove livingEntity from team
-            if (livingEntity instanceof PlayerEntity) {
-                PlayerEntity playerEntity = ((PlayerEntity) livingEntity);
-                scoreboard.clearPlayerTeam(playerEntity.getName().getString());
+            if (livingEntity instanceof Player) {
+                Player playerEntity = ((Player) livingEntity);
+                scoreboard.removePlayerFromTeam(playerEntity.getName().getString());
             } else {
-                scoreboard.clearPlayerTeam(livingEntity.getUuidAsString());
+                scoreboard.removePlayerFromTeam(livingEntity.getStringUUID());
             }
         }
     }
@@ -145,13 +124,13 @@ public class TeamUtil {
             makeTeam(teamName, scoreboard);
         }
         // Add livingEntity to team
-        Team team = scoreboard.getTeam(teamName);
-        if (livingEntity instanceof PlayerEntity) {
-            PlayerEntity playerEntity = ((PlayerEntity) livingEntity);
+        PlayerTeam team = scoreboard.getPlayerTeam(teamName);
+        if (livingEntity instanceof Player) {
+            Player playerEntity = ((Player) livingEntity);
             scoreboard.addPlayerToTeam(playerEntity.getName().getString(), team);
         } else {
             // Add livingEntity to team
-            scoreboard.addPlayerToTeam(livingEntity.getUuidAsString(), team);
+            scoreboard.addPlayerToTeam(livingEntity.getStringUUID(), team);
         }
     }
 
@@ -163,9 +142,9 @@ public class TeamUtil {
     }
 
     public static void makeTeam(String name, ServerScoreboard scoreboard) {
-        Team team = scoreboard.addTeam(name);
-        if (Formatting.byName(name) != null) team.setColor(Formatting.byName(name));
-        else team.setColor(Formatting.WHITE);
+        PlayerTeam team = scoreboard.addPlayerTeam(name);
+        if (ChatFormatting.getByName(name) != null) team.setColor(ChatFormatting.getByName(name));
+        else team.setColor(ChatFormatting.WHITE);
     }
 
 
@@ -175,22 +154,22 @@ public class TeamUtil {
     public static void alertOthersOnTeam(LivingEntity attacked, LivingEntity attacker) {
         double alertHorizontalDistance = 16;
         double alertVerticalDistance = 16;
-        Box box = Box.from(attacked.getPos()).expand(alertHorizontalDistance, alertVerticalDistance,
+        AABB box = AABB.unitCubeFromLowerCorner(attacked.getEyePosition()).inflate(alertHorizontalDistance, alertVerticalDistance,
                 alertHorizontalDistance);
         // Maybe add team predicate
-        List<MobEntity> list = attacked.world.getEntitiesByClass(MobEntity.class, box, EntityPredicates.VALID_ENTITY);
+        List<Mob> list = attacked.level.getEntitiesOfClass(Mob.class, box, EntitySelector.LIVING_ENTITY_STILL_ALIVE);
         Iterator iterator = list.iterator();
 
-        MobEntity mobentity;
+        Mob mobentity;
         while (true) {
             if (!iterator.hasNext()) {
                 return;
             }
-            mobentity = (MobEntity) iterator.next();
-            if (mobentity.isTeammate(attacked) && attacked != mobentity && mobentity.getTarget() == null
-                    && attacker != null && !mobentity.isTeammate(attacker) && attacker.isAlive()) {
+            mobentity = (Mob) iterator.next();
+            if (mobentity.isAlliedTo(attacked) && attacked != mobentity && mobentity.getTarget() == null
+                    && attacker != null && !mobentity.isAlliedTo(attacker) && attacker.isAlive()) {
                 mobentity.setTarget(attacker);
-                mobentity.setAttacker(attacker);
+                mobentity.setLastHurtByMob(attacker);
             }
         }
     }
@@ -201,15 +180,15 @@ public class TeamUtil {
         @Override
         public boolean test(LivingEntity target) {
             // Target must be on a team to target
-            return target.getScoreboardTeam() != null;
+            return target.getTeam() != null;
         }
     }
 
     public static class notOnTeamAndHostileExceptCreeperEntityPredicate implements Predicate<LivingEntity> {
         @Override
         public boolean test(LivingEntity target) {
-            return (!(target instanceof CreeperEntity) && target.getScoreboardTeam() == null &&
-                    (target instanceof HostileEntity || target instanceof SlimeEntity));
+            return (!(target instanceof Creeper) && target.getTeam() == null &&
+                    (target instanceof Monster || target instanceof Slime));
         }
     }
 
@@ -217,152 +196,8 @@ public class TeamUtil {
     public static class OnTeamAndHostileExceptCreeperEntityPredicate implements Predicate<LivingEntity> {
         @Override
         public boolean test(LivingEntity target) {
-            return (!(target instanceof CreeperEntity) && target.getScoreboardTeam() != null &&
-                    (target instanceof HostileEntity || target instanceof SlimeEntity));
-        }
-    }
-
-
-
-
-
-
-    // Probably can remove
-    // Pretty much an exact copy of Nearest attackable target, but it is using the team only attack target
-    public static class NearestAttackableTargetGoal<T extends LivingEntity> extends TrackTargetGoal {
-        protected final Class<T> targetClass;
-        protected final int targetChance;
-        protected LivingEntity nearestTarget;
-        /** This filter is applied to the Entity search. Only matching entities will be targeted. */
-        public TargetPredicate targetEntitySelector;
-        public Predicate<LivingEntity> livingEntityPredicate;
-
-        public NearestAttackableTargetGoal(MobEntity goalOwnerIn, Class<T> targetClassIn,
-                                           int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn,
-                                           Predicate<LivingEntity> livingEntityPredicateIn) {
-            super(goalOwnerIn, checkSight, nearbyOnlyIn);
-            targetClass = targetClassIn;
-            targetChance = targetChanceIn;
-            setControls(EnumSet.of(Goal.Control.TARGET));
-            targetEntitySelector = TargetPredicate.DEFAULT.setBaseMaxDistance(getFollowRange());
-            livingEntityPredicate = livingEntityPredicateIn;
-        }
-
-
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
-        public boolean canStart() {
-            if (targetChance > 0 && mob.getRandom().nextInt(100) < targetChance) {
-                return false;
-            } else {
-                findNearestTarget();
-                return nearestTarget != null;
-            }
-        }
-
-        protected Box getTargetableArea(double targetDistance) {
-            return mob.getBoundingBox().expand(targetDistance, targetDistance, targetDistance);
-        }
-
-        protected void findNearestTarget() {
-            nearestTarget = mob.world.getClosestEntity(
-                    mob.world.getEntitiesByClass(targetClass, getTargetableArea(getFollowRange()), livingEntityPredicate),
-                    targetEntitySelector, mob, mob.getX(),
-                    mob.getEyeY(), mob.getZ());
-        }
-
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
-        public void start() {
-            if (nearestTarget.isAlive()) {
-                mob.setTarget(nearestTarget);
-            }
-            super.start();
-        }
-    }
-
-    public static class FollowLivingEntityGoal extends Goal {
-        private final MobEntity mob;
-        private final Predicate<LivingEntity> followTargetPredicate;
-        private LivingEntity target;
-        private final double speed;
-        private final EntityNavigation navigation;
-        private int updateCountdownTicks;
-        private final float minDistance;
-        private float oldWaterPathFindingPenalty;
-        private final float maxDistance;
-        private final boolean sneak;
-
-        public FollowLivingEntityGoal(MobEntity mob, Predicate<LivingEntity> followTargetPredicate, double speed,
-                                      float minDistance, float maxDistance, boolean sneak) {
-            this.mob = mob;
-            this.followTargetPredicate = followTargetPredicate;
-            this.speed = speed;
-            this.navigation = mob.getNavigation();
-            this.minDistance = minDistance;
-            this.maxDistance = maxDistance;
-            this.sneak = sneak;
-            this.setControls(EnumSet.of(Goal.Control.MOVE));
-
-        }
-
-        public boolean canStart() {
-            List<LivingEntity> list = this.mob.world.getEntitiesByClass(LivingEntity.class,
-                    this.mob.getBoundingBox().expand(this.maxDistance), this.followTargetPredicate);
-            LivingEntity closestEntity = this.mob.world.getClosestEntity(list, TargetPredicate.DEFAULT, null,
-                    mob.getX(), mob.getX(), mob.getX());
-            if (closestEntity != null) {
-                this.target = closestEntity;
-                return true;
-            }
-
-            return false;
-        }
-
-        public boolean shouldContinue() {
-            if (sneak && !target.isSneaking()) return false;
-            return this.target != null && !this.navigation.isIdle() && this.mob.squaredDistanceTo(this.target) >
-                                                                       (double)(this.minDistance * this.minDistance);
-        }
-
-        public void start() {
-            if (sneak) {
-                mob.setSneaking(true);
-                mob.setSilent(true);
-            }
-            this.updateCountdownTicks = 0;
-            this.oldWaterPathFindingPenalty = this.mob.getPathfindingPenalty(PathNodeType.WATER);
-            this.mob.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
-        }
-
-        public void stop() {
-            if (sneak) {
-                mob.setSneaking(false);
-                mob.setSilent(false);
-            }
-            this.target = null;
-            this.navigation.stop();
-            this.mob.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathFindingPenalty);
-        }
-
-        public void tick() {
-            if (this.target != null && !this.mob.isLeashed()) {
-                if (--this.updateCountdownTicks <= 0) {
-                    this.updateCountdownTicks = 10;
-                    double d = this.mob.getX() - this.target.getX();
-                    double e = this.mob.getY() - this.target.getY();
-                    double f = this.mob.getZ() - this.target.getZ();
-                    double g = d * d + e * e + f * f;
-                    if (!(g <= (double)(this.minDistance * this.minDistance))) {
-                        this.navigation.startMovingTo(this.target, this.speed);
-                    } else {
-                        this.navigation.stop();
-                    }
-                }
-            }
+            return (!(target instanceof Creeper) && target.getTeam() != null &&
+                    (target instanceof Monster || target instanceof Slime));
         }
     }
 }
