@@ -88,13 +88,13 @@ publishing {
 // Runs batch script to auto copy mod to mods folder on local on dedicated server
 // and then start minecraft locally and start the dedicated minecraft server
 task runDedicatedTest(type: Exec, dependsOn: check) {
-	commandLine 'cmd', '/c', "..\\BuildToDevServer.bat" +
+	commandLine 'cmd', '/c', "..\\..\\BuildToDevServer.bat" +
 			" " + projectDir.getName() + " " + archivesBaseName + "-" + project.mod_version + ".jar"
 }
 build.dependsOn runDedicatedTest
 
 // Runs batch script to auto copy builds from build server
 task getStructuresFromBuildServer(type: Exec, dependsOn: compileJava) {
-	commandLine 'cmd', '/c', "..\\GetStructuresFromBuildServer.bat"
+	commandLine 'cmd', '/c', "..\\..\\GetStructuresFromBuildServer.bat"
 }
 processResources.dependsOn getStructuresFromBuildServer
