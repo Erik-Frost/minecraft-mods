@@ -5,30 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/forge.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradle.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/example/examplemod/ExampleMod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/META-INF/mods.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/pack.mcmeta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +76,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../fabric" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
   <component name="RunManager" selected="Gradle.world-anchor-player-trust [downloadAssets]">

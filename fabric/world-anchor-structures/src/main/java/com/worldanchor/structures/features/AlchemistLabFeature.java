@@ -50,7 +50,7 @@ public class AlchemistLabFeature extends Utility.ModStructureFeature {
             new AlchemistLabFeature(JigsawConfiguration.CODEC);
     static {
         registerStructure(ID, DEFAULT, GenerationStep.Decoration.STRONGHOLDS,
-                48,32,723415563, false);
+                49,32,723415563, false);
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, ID,
                 DEFAULT.configured(new JigsawConfiguration(() -> STRUCTURE_POOLS, STRUCTURE_POOLS.size())));
     }
