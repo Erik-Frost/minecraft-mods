@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../fabric/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-qol/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-qol/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-structures/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
