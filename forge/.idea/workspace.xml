@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/forge.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/example/examplemod/ExampleMod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/META-INF/mods.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/pack.mcmeta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/world-anchor-player-trust">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/world-anchor-player-trust">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="world-anchor-player-trust" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="world-anchor-player-trust" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="world-anchor-player-trust" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="forgegradle runs" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="world-anchor-player-trust" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1x9ro75SRo2iDnwKTm0KTR47vL3" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+  </component>
+  <component name="RunManager" selected="Gradle.world-anchor-player-trust [downloadAssets]">
+    <configuration name="world-anchor-player-trust [components]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="components" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="world-anchor-player-trust [downloadAssets]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="downloadAssets" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="world-anchor-player-trust [downloadMCMeta]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="downloadMCMeta" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="world-anchor-player-trust [genIntellijRuns]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="genIntellijRuns" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="world-anchor-player-trust [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runClient" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.world-anchor-player-trust [downloadAssets]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [downloadMCMeta]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [components]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [runClient]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [genIntellijRuns]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="" />
+      <created>1629778317589</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1629778317589</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:io.netty:netty-all" />
+    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm-analysis" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:forgespi" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl-glfw" />
+    <option featureType="dependencySupport" implementationName="java:commons-codec:commons-codec" />
+    <option featureType="dependencySupport" implementationName="java:org.antlr:antlr-runtime" />
+    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm-tree" />
+    <option featureType="dependencySupport" implementationName="java:net.java.jutils:jutils" />
+    <option featureType="dependencySupport" implementationName="java:org.abego.treelayout:org.abego.treelayout.core" />
+    <option featureType="dependencySupport" implementationName="java:cpw.mods:modlauncher" />
+    <option featureType="dependencySupport" implementationName="java:org.codehaus.plexus:plexus-utils" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:mergetool" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl-openal" />
+    <option featureType="dependencySupport" implementationName="java:com.google.code.gson:gson" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:text2speech" />
+    <option featureType="dependencySupport" implementationName="java:commons-io:commons-io" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.commons:commons-compress" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:accesstransformers" />
+    <option featureType="dependencySupport" implementationName="java:cpw.mods:securejarhandler" />
+    <option featureType="dependencySupport" implementationName="java:net.minecrell:terminalconsoleappender" />
+    <option featureType="dependencySupport" implementationName="java:net.java.dev.jna:jna-platform" />
+    <option featureType="dependencySupport" implementationName="java:org.antlr:ST4" />
+    <option featureType="dependencySupport" implementationName="java:org.glassfish:javax.json" />
+    <option featureType="dependencySupport" implementationName="java:org.antlr:antlr4-runtime" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl" />
+    <option featureType="dependencySupport" implementationName="java:ca.weblite:java-objc-bridge" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:javabridge" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:mclanguage" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:datafixerupper" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:fmlloader" />
+    <option featureType="dependencySupport" implementationName="java:com.electronwill.night-config:toml" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl-tinyfd" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:forge" />
+    <option featureType="dependencySupport" implementationName="java:org.jline:jline-terminal" />
+    <option featureType="dependencySupport" implementationName="java:commons-logging:commons-logging" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:srgutils" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.httpcomponents:httpcore" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.maven:maven-artifact" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.commons:commons-lang3" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl-stb" />
+    <option featureType="dependencySupport" implementationName="java:org.jline:jline-reader" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:patchy" />
+    <option featureType="dependencySupport" implementationName="java:net.sf.jopt-simple:jopt-simple" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl-opengl" />
+    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm-commons" />
+    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm" />
+    <option featureType="dependencySupport" implementationName="java:cpw.mods:bootstraplauncher" />
+    <option featureType="dependencySupport" implementationName="java:org.slf4j:slf4j-api" />
+    <option featureType="dependencySupport" implementationName="java:com.google.code.findbugs:jsr305" />
+    <option featureType="dependencySupport" implementationName="java:net.java.dev.jna:jna" />
+    <option featureType="dependencySupport" implementationName="java:com.google.guava:guava" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:unsafe" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:coremods" />
+    <option featureType="dependencySupport" implementationName="java:net.jodah:typetools" />
+    <option featureType="dependencySupport" implementationName="java:com.ibm.icu:icu4j" />
+    <option featureType="dependencySupport" implementationName="java:com.electronwill.night-config:core" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:authlib" />
+    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm-util" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraft:client" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:eventbus" />
+    <option featureType="dependencySupport" implementationName="java:org.antlr:antlr4" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:javafmllanguage" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:brigadier" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:fmlcore" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraft:mappings_official" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.httpcomponents:httpclient" />
+    <option featureType="dependencySupport" implementationName="java:org.lwjgl:lwjgl-jemalloc" />
+    <option featureType="dependencySupport" implementationName="java:com.github.oshi:oshi-core" />
+    <option featureType="dependencySupport" implementationName="java:net.java.jinput:jinput-platform" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-slf4j18-impl" />
+    <option featureType="dependencySupport" implementationName="java:com.mojang:blocklist" />
+    <option featureType="dependencySupport" implementationName="java:it.unimi.dsi:fastutil" />
+    <option featureType="dependencySupport" implementationName="java:net.java.jinput:jinput" />
+    <option featureType="dependencySupport" implementationName="java:org.openjdk.nashorn:nashorn-core" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-api" />
+    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-core" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>
