@@ -5,28 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/WorldAnchorMod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/mixin/ServerGamePacketListenerImplMixin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/world-anchor-player-trust.mixins.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../GetStructuresFromBuildServer.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../GetStructuresFromBuildServer.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BuildToDevServer.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../BuildToDevServer.bat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/patches/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/patches/mixin/ServerGamePacketListenerImplMixin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/mixin/ServerGamePacketListenerImplMixin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/fabric.mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/fabric.mod.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/world-anchor-patches.mixins.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/world-anchor-player-trust.mixins.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/world-anchor-player-trust/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/example/examplemod/ExampleMod.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/META-INF/mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/META-INF/mods.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

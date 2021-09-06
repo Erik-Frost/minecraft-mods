@@ -1,6 +1,8 @@
 set modname=%1
 set modfile=%2
 
+git -C %~dp0minecraft-server\ pull git@github.com:TheWorldAnchor/minecraft-server.git dev
+
 if not x%modfile:-fabric-mc=%==x%modfile% GOTO FABRIC
 if not x%modfile:-forge-mc=%==x%modfile% GOTO FORGE
 :AFTER
