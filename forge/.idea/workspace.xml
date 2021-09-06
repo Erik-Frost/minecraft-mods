@@ -5,16 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/WorldAnchorMod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/mixin/ServerGamePacketListenerImplMixin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/world-anchor-player-trust.mixins.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GetStructuresFromBuildServer.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../GetStructuresFromBuildServer.bat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/patches/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/patches/mixin/ServerGamePacketListenerImplMixin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/java/com/worldanchor/playertrust/mixin/ServerGamePacketListenerImplMixin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/fabric.mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/fabric.mod.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/world-anchor-patches.mixins.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/src/main/resources/world-anchor-player-trust.mixins.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-qol/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-qol/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-structures/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-structures/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-structures/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/world-anchor-player-trust.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/world-anchor-player-trust/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world-anchor-player-trust/src/main/java/com/example/examplemod/ExampleMod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/META-INF/mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/world-anchor-player-trust/src/main/resources/META-INF/mods.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,13 +60,13 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="world-anchor-player-trust" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="forgegradle runs" type="c8890929:TasksNode$1" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="world-anchor-player-trust" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="other" type="c8890929:TasksNode$1" />
+                <item name="help" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -75,20 +87,34 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1x9ro75SRo2iDnwKTm0KTR47vL3" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../fabric" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
-  <component name="RunManager" selected="Gradle.world-anchor-player-trust [downloadAssets]">
-    <configuration name="world-anchor-player-trust [components]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\erik\Desktop\Github\minecraft-mods\forge\world-anchor-player-trust\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.worldanchor.playertrust.mixin" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.world-anchor-player-trust [build]">
+    <configuration name="world-anchor-player-trust [buildDependents]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
@@ -99,7 +125,49 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="components" />
+            <option value="buildDependents" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="world-anchor-player-trust [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="world-anchor-player-trust [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -130,27 +198,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="world-anchor-player-trust [downloadMCMeta]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="downloadMCMeta" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="world-anchor-player-trust [genIntellijRuns]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -172,34 +219,13 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="world-anchor-player-trust [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/world-anchor-player-trust" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="runClient" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.world-anchor-player-trust [downloadAssets]" />
-        <item itemvalue="Gradle.world-anchor-player-trust [downloadMCMeta]" />
-        <item itemvalue="Gradle.world-anchor-player-trust [components]" />
-        <item itemvalue="Gradle.world-anchor-player-trust [runClient]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [build]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [clean]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [buildDependents]" />
         <item itemvalue="Gradle.world-anchor-player-trust [genIntellijRuns]" />
+        <item itemvalue="Gradle.world-anchor-player-trust [downloadAssets]" />
       </list>
     </recent_temporary>
   </component>
@@ -303,5 +329,8 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

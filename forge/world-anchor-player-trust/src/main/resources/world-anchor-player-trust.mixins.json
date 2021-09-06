@@ -1,8 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.worldanchor.patches.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "package": "com.worldanchor.playertrust.mixin",
+  "refmap": "world-anchor-player-trust.refmap.json",
+  "compatibilityLevel": "JAVA_11",
   "mixins": [
     "ServerGamePacketListenerImplMixin"
   ],

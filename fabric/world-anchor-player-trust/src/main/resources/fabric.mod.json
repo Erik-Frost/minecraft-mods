@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "world-anchor-patches",
+  "id": "world-anchor-player-trust",
   "version": "${version}",
   "name": "World Anchor Patches",
   "description": "A mod that patches any issues World Anchor finds with Minecraft.",
@@ -8,11 +8,11 @@
   "environment": "server",
   "entrypoints": {
     "server": [
-      "com.worldanchor.patches.Server"
+      "com.worldanchor.playertrust.Server"
     ]
   },
   "mixins": [
-    "world-anchor-patches.mixins.json"
+    "world-anchor-player-trust.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.3",

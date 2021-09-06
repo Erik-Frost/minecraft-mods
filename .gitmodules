@@ -1,0 +1,4 @@
+[submodule "minecraft-server"]
+	path = minecraft-server
+	url = git@github.com:TheWorldAnchor/minecraft-server.git
+	branch = dev
