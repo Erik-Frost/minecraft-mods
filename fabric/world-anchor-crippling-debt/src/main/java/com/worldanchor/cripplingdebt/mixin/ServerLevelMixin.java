@@ -9,7 +9,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class ServerLevelMixin {
     @Redirect(method = "tickTime", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setDayTime(J)V"))
     private void injected(ServerLevel serverLevel, long l) {
-        if (serverLevel.isNight()) serverLevel.setDayTime(serverLevel.getLevelData().getDayTime() + 3L);
+        //night is from 13000 to 23000
+        if (13000 <= serverLevel.getLevelData().getDayTime() % 24000 && serverLevel.getLevelData().getDayTime() % 24000 < 23000)
+            serverLevel.setDayTime(serverLevel.getLevelData().getDayTime() + 3L);
         else serverLevel.setDayTime(serverLevel.getLevelData().getDayTime() + 2L);
     }
 

@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.world.level.GameRules;
 
 public class Mod implements ModInitializer {
+    public static final String MODID = "world-anchor-crippling-debt";
 
     @Override
     public void onInitialize() {
