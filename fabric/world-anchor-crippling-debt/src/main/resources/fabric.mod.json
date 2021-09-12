@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "world-anchor-crippling-debt",
+  "version": "${version}",
+  "name": "Minecraft: Crippling Debt Edition",
+  "description": "Gives Minecraft that soul crushing crippling debt experience ^-^",
+  "license": "All rights reserved.",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "com.worldanchor.cripplingdebt.Server"
+    ]
+  },
+  "mixins": [
+    "world-anchor-crippling-debt.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  }
+}

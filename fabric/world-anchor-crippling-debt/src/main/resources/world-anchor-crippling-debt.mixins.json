@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.worldanchor.cripplingdebt.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

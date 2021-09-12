@@ -71,5 +71,10 @@
       <option name="name" value="UserLocalRemappedMods" />
       <option name="url" value="file:/$PROJECT_DIR$/world-anchor-player-trust/.gradle/loom-cache/remapped_mods/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/world-anchor-crippling-debt/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
   </component>
 </project>

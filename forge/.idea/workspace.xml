@@ -5,7 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa7dbda8-20b7-42cf-985e-d69afc00375c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../fabric/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/.github/workflows/build.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/src/main/java/com/worldanchor/cripplingdebt/Server.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/src/main/resources/fabric.mod.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fabric/world-anchor-crippling-debt/src/main/resources/world-anchor-crippling-debt.mixins.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fabric/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-monster-teams/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-player-trust/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../fabric/world-anchor-qol/build.gradle" afterDir="false" />
