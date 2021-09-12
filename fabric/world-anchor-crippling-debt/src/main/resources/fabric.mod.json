@@ -5,10 +5,16 @@
   "name": "Minecraft: Crippling Debt Edition",
   "description": "Gives Minecraft that soul crushing crippling debt experience ^-^",
   "license": "All rights reserved.",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
+    "main": [
+      "com.worldanchor.cripplingdebt.Mod"
+    ],
     "server": [
       "com.worldanchor.cripplingdebt.Server"
+    ],
+    "client": [
+      "com.worldanchor.cripplingdebt.Client"
     ]
   },
   "mixins": [

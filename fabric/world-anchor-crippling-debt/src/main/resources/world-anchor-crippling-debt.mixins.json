@@ -3,9 +3,17 @@
   "minVersion": "0.8",
   "package": "com.worldanchor.cripplingdebt.mixin",
   "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "ServerLevelMixin"
+  ],
   "server": [
+
+  ],
+  "client": [
+    "ClientLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   }
+
 }
