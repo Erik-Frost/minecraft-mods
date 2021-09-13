@@ -4,13 +4,16 @@
   "package": "com.worldanchor.cripplingdebt.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "ServerLevelMixin"
+    "MainMixin",
+    "MinecraftServerMixin",
+    "ServerLevelMixin",
+    "ServerPlayerMixin"
   ],
   "server": [
-
   ],
   "client": [
-    "ClientLevelMixin"
+    "ClientLevelMixin",
+    "CreateWorldScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
