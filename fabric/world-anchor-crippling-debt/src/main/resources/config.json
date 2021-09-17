@@ -1,0 +1,39 @@
+{
+  "dayDurationDivider": 2,
+  "nightDurationDivider": 3,
+  "multiplyEnemyHealthEachDayBy": 1.1,
+  "multiplyEnemyDamageEachDayBy": 1.05,
+  "enemies": [
+    {
+      "entity": "minecraft:zombie",
+      "name": "Zombie ^-^",
+      "spawnRates": [
+        {
+          "startingAtNight": 1,
+          "averageSpawnsEachNight": 100,
+          "additionalSpawnsForEachExtraAlivePlayer": 5
+        },
+        {
+          "startingAtNight": 2,
+          "averageSpawnsEachNight": 200,
+          "additionalSpawnsForEachExtraAlivePlayer": 10
+        }
+      ]
+    },
+    {
+      "entity": "minecraft:skeleton",
+      "spawnRates": [
+        {
+          "startingAtNight": 2,
+          "averageSpawnsEachNight": 100,
+          "additionalSpawnsForEachExtraAlivePlayer": 5
+        },
+        {
+          "startingAtNight": 3,
+          "averageSpawnsEachNight": 200,
+          "additionalSpawnsForEachExtraAlivePlayer": 10
+        }
+      ]
+    }
+  ]
+}
