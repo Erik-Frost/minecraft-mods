@@ -47,21 +47,24 @@ public abstract class MinecraftServerMixin {
         //night is from 13000 to 23000
         if (13000 <= overworld().getLevelData().getDayTime() % 24000 &&
                 overworld().getLevelData().getDayTime() % 24000 < 23000) {
-            int currentDay = (int) (overworld().getGameTime() / Mod.CONFIG.getDayCycleDuration()) + 1;
+            double currentDay = (overworld().getGameTime() / Mod.CONFIG.getDayCycleDuration()) + 1;
+            double enemyHealthMultiplier = Math.pow(Mod.CONFIG.multiplyEnemyHealthEachDayBy, currentDay);
+            double enemyDamageMultiplier = Math.pow(Mod.CONFIG.multiplyEnemyDamageEachDayBy, currentDay);
             ArrayList<Player> alivePlayers = new ArrayList<>();
             for (ServerPlayer player : playerList.getPlayers()) {
                 if (player.isAlive() && player.gameMode.isSurvival()) alivePlayers.add(player);
             }
-            // This gets called 3333 times every night so a 1/3333 chance to spawn means 1 per night
+            // Spawn enemies
             if (alivePlayers.size() > 0) {
                 for (Enemy enemy : Mod.CONFIG.enemies) {
                     // Find the latest spawnrate
                     int latest = 0;
-                    float spawnChance = 0;
+                    double spawnChance = 0;
                     for (SpawnRate spawnRate : enemy.spawnRates) {
-                        if (spawnRate.startingAtNight >= latest && spawnRate.startingAtNight <= currentDay) {
+                        if (spawnRate.startingAtNight >= latest && spawnRate.startingAtNight <= (int) currentDay) {
                             spawnChance = (spawnRate.averageSpawnsEachNight +
-                                    ((alivePlayers.size() - 1) * spawnRate.additionalSpawnsForEachExtraAlivePlayer))/3333f;
+                                    ((alivePlayers.size() - 1) * spawnRate.additionalSpawnsForEachExtraAlivePlayer)) /
+                                    Mod.CONFIG.getNightDuration();
                             latest = spawnRate.startingAtNight;
                         }
                     }
@@ -71,7 +74,8 @@ public abstract class MinecraftServerMixin {
                         Player player = alivePlayers.get(random.nextInt(alivePlayers.size()));
                         Mod.SpawnEnemy(EntityType.byString(enemy.entity).get(), (ServerLevel) player.level,
                                 player.getOnPos(), new Vec3(160, 160, 160), MobSpawnType.COMMAND,
-                                null, 5000, 24, enemy.name);
+                                null, 5000, 24, enemy.name, enemyHealthMultiplier,
+                                enemyDamageMultiplier, enemy.canFly);
                     }
 
                 }

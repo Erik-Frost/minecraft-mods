@@ -10,28 +10,78 @@
       "spawnRates": [
         {
           "startingAtNight": 1,
-          "averageSpawnsEachNight": 100,
+          "averageSpawnsEachNight": 10,
           "additionalSpawnsForEachExtraAlivePlayer": 5
         },
         {
           "startingAtNight": 2,
-          "averageSpawnsEachNight": 200,
+          "averageSpawnsEachNight": 20,
           "additionalSpawnsForEachExtraAlivePlayer": 10
         }
       ]
     },
     {
       "entity": "minecraft:skeleton",
+      "name": "rattly boi",
+      "spawnRates": [
+        {
+          "startingAtNight": 1,
+          "averageSpawnsEachNight": 5,
+          "additionalSpawnsForEachExtraAlivePlayer": 3
+        },
+        {
+          "startingAtNight": 2,
+          "averageSpawnsEachNight": 10,
+          "additionalSpawnsForEachExtraAlivePlayer": 5
+        }
+      ]
+    },
+    {
+      "entity": "minecraft:spider",
+      "name": "spoooder",
+      "spawnRates": [
+        {
+          "startingAtNight": 1,
+          "averageSpawnsEachNight": 7,
+          "additionalSpawnsForEachExtraAlivePlayer": 4
+        },
+        {
+          "startingAtNight": 2,
+          "averageSpawnsEachNight": 14,
+          "additionalSpawnsForEachExtraAlivePlayer": 17
+        }
+      ]
+    },
+    {
+      "entity": "minecraft:blaze",
+      "name": "burning boi",
+      "canFly": true,
+      "spawnRates": [
+        {
+          "startingAtNight": 3,
+          "averageSpawnsEachNight": 3,
+          "additionalSpawnsForEachExtraAlivePlayer": 1
+        },
+        {
+          "startingAtNight": 4,
+          "averageSpawnsEachNight": 6,
+          "additionalSpawnsForEachExtraAlivePlayer": 2
+        }
+      ]
+    },
+    {
+      "entity": "minecraft:slime",
+      "name": "squishy",
       "spawnRates": [
         {
           "startingAtNight": 2,
-          "averageSpawnsEachNight": 100,
-          "additionalSpawnsForEachExtraAlivePlayer": 5
+          "averageSpawnsEachNight": 6,
+          "additionalSpawnsForEachExtraAlivePlayer": 3
         },
         {
           "startingAtNight": 3,
-          "averageSpawnsEachNight": 200,
-          "additionalSpawnsForEachExtraAlivePlayer": 10
+          "averageSpawnsEachNight": 12,
+          "additionalSpawnsForEachExtraAlivePlayer": 6
         }
       ]
     }

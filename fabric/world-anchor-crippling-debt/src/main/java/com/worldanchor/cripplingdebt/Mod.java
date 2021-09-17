@@ -19,6 +19,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
@@ -106,18 +107,19 @@ public class Mod implements ModInitializer {
     @Nullable
     public static Entity SpawnEnemy(EntityType<?> entityType, ServerLevel serverLevel, BlockPos center,
             Vec3 spawnRange, MobSpawnType mobSpawnType, @Nullable PlayerTeam team, int attempts,
-            int distanceFromPlayers, String name) {
+            int distanceFromPlayers, String name, double enemyHealthMultiplier, double enemyDamageMultiplier,
+            boolean canFly) {
         Entity enemy = null;
         // Attempt to find viable enemy spawn point while caring about collision
         BlockPos blockPos = FindViableEntitySpawnPointInBox(entityType, serverLevel, center, spawnRange, distanceFromPlayers,
-                attempts, true, false);
+                attempts, true, canFly);
         if (blockPos != null) {
             enemy = SpawnEntity(entityType, serverLevel, mobSpawnType, blockPos, team, name, true);
         }
         else {
             // Find viable spawn position without caring about collision
             blockPos = FindViableEntitySpawnPointInBox(entityType, serverLevel, center, spawnRange, distanceFromPlayers,
-                    attempts, false, false);
+                    attempts, false, canFly);
             if (blockPos != null) {
                 // Destroy a block and create explosion in world to make room for enemy
                 serverLevel.destroyBlock(blockPos, false);
@@ -126,16 +128,26 @@ public class Mod implements ModInitializer {
                 // Spawn enemy after last attempt regardless of environmental conditions
                 enemy = SpawnEntity(entityType, serverLevel, mobSpawnType, blockPos, team, name, true);
                 // Give enemy damage resistance to resist the explosion damage
-                if (enemy instanceof LivingEntity) ((LivingEntity) enemy).addEffect(
+                if (enemy instanceof LivingEntity livingEnemy) livingEnemy.addEffect(
                         new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 3));
             }
         }
-        // Make the follow range of the entity 160 so they can track from much farther
-        if (enemy instanceof LivingEntity) {
-            Objects.requireNonNull(((LivingEntity) enemy).getAttributes()
+        if (enemy instanceof LivingEntity livingEnemy) {
+            // Make the follow range of the entity 160 so they can track from much farther
+            Objects.requireNonNull(livingEnemy.getAttributes()
                     .getInstance(Attributes.FOLLOW_RANGE)).setBaseValue(160d);
+            // Also exponentially scale health and damage
+            double enemyBaseHealth = Objects.requireNonNull(livingEnemy.getAttributes()
+                    .getInstance(Attributes.MAX_HEALTH)).getValue();
+            Objects.requireNonNull(livingEnemy.getAttributes()
+                    .getInstance(Attributes.MAX_HEALTH)).setBaseValue(enemyBaseHealth * enemyHealthMultiplier);
+            double enemyBaseDamage = Objects.requireNonNull(livingEnemy.getAttributes()
+                    .getInstance(Attributes.ATTACK_DAMAGE)).getValue();
+            Objects.requireNonNull(livingEnemy.getAttributes()
+                    .getInstance(Attributes.ATTACK_DAMAGE)).setBaseValue(enemyBaseDamage * enemyDamageMultiplier);
+            // Make sure new enemy is fully healed
+            livingEnemy.setHealth(livingEnemy.getMaxHealth());
         }
-
         return enemy;
     }
 
