@@ -6,6 +6,7 @@
   "mixins": [
     "MainMixin",
     "MinecraftServerMixin",
+    "MobAccessor",
     "ServerLevelMixin",
     "ServerPlayerMixin"
   ],

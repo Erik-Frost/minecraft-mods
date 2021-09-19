@@ -7,6 +7,7 @@ public class Config {
     public Integer nightDurationDivider;
     public Double multiplyEnemyHealthEachDayBy;
     public Double multiplyEnemyDamageEachDayBy;
+    public Double percentIncreaseOfEnemySpawnsForEachExtraAlivePlayer;
     public List<Enemy> enemies = null;
 
     public double getDayCycleDuration() {

@@ -35,8 +35,6 @@ public abstract class MinecraftServerMixin {
 
     @Shadow @Final private Random random;
 
-    @Shadow @Final protected WorldData worldData;
-
     @Redirect(method = "setDifficulty", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/WorldData;isHardcore()Z"))
     private boolean redirectIsHardcore(WorldData worldData) {
         return false;
@@ -63,7 +61,8 @@ public abstract class MinecraftServerMixin {
                     for (SpawnRate spawnRate : enemy.spawnRates) {
                         if (spawnRate.startingAtNight >= latest && spawnRate.startingAtNight <= (int) currentDay) {
                             spawnChance = (spawnRate.averageSpawnsEachNight +
-                                    ((alivePlayers.size() - 1) * spawnRate.additionalSpawnsForEachExtraAlivePlayer)) /
+                                    (spawnRate.averageSpawnsEachNight * (alivePlayers.size() - 1)
+                                            * (Mod.CONFIG.percentIncreaseOfEnemySpawnsForEachExtraAlivePlayer/100))) /
                                     Mod.CONFIG.getNightDuration();
                             latest = spawnRate.startingAtNight;
                         }

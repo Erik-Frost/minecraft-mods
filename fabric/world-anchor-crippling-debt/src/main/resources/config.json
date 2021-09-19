@@ -3,6 +3,7 @@
   "nightDurationDivider": 3,
   "multiplyEnemyHealthEachDayBy": 1.1,
   "multiplyEnemyDamageEachDayBy": 1.05,
+  "percentIncreaseOfEnemySpawnsForEachExtraAlivePlayer": 50,
   "enemies": [
     {
       "entity": "minecraft:zombie",
@@ -10,13 +11,11 @@
       "spawnRates": [
         {
           "startingAtNight": 1,
-          "averageSpawnsEachNight": 10,
-          "additionalSpawnsForEachExtraAlivePlayer": 5
+          "averageSpawnsEachNight": 100
         },
         {
           "startingAtNight": 2,
-          "averageSpawnsEachNight": 20,
-          "additionalSpawnsForEachExtraAlivePlayer": 10
+          "averageSpawnsEachNight": 20
         }
       ]
     },
@@ -26,13 +25,11 @@
       "spawnRates": [
         {
           "startingAtNight": 1,
-          "averageSpawnsEachNight": 5,
-          "additionalSpawnsForEachExtraAlivePlayer": 3
+          "averageSpawnsEachNight": 5
         },
         {
           "startingAtNight": 2,
-          "averageSpawnsEachNight": 10,
-          "additionalSpawnsForEachExtraAlivePlayer": 5
+          "averageSpawnsEachNight": 10
         }
       ]
     },
@@ -42,13 +39,11 @@
       "spawnRates": [
         {
           "startingAtNight": 1,
-          "averageSpawnsEachNight": 7,
-          "additionalSpawnsForEachExtraAlivePlayer": 4
+          "averageSpawnsEachNight": 7
         },
         {
           "startingAtNight": 2,
-          "averageSpawnsEachNight": 14,
-          "additionalSpawnsForEachExtraAlivePlayer": 17
+          "averageSpawnsEachNight": 14
         }
       ]
     },
@@ -59,13 +54,11 @@
       "spawnRates": [
         {
           "startingAtNight": 3,
-          "averageSpawnsEachNight": 3,
-          "additionalSpawnsForEachExtraAlivePlayer": 1
+          "averageSpawnsEachNight": 3
         },
         {
           "startingAtNight": 4,
-          "averageSpawnsEachNight": 6,
-          "additionalSpawnsForEachExtraAlivePlayer": 2
+          "averageSpawnsEachNight": 6
         }
       ]
     },
@@ -75,13 +68,11 @@
       "spawnRates": [
         {
           "startingAtNight": 2,
-          "averageSpawnsEachNight": 6,
-          "additionalSpawnsForEachExtraAlivePlayer": 3
+          "averageSpawnsEachNight": 6
         },
         {
           "startingAtNight": 3,
-          "averageSpawnsEachNight": 12,
-          "additionalSpawnsForEachExtraAlivePlayer": 6
+          "averageSpawnsEachNight": 12
         }
       ]
     }

@@ -2,6 +2,7 @@ package com.worldanchor.cripplingdebt;
 
 import com.mojang.brigadier.Command;
 import com.worldanchor.cripplingdebt.config.Config;
+import com.worldanchor.cripplingdebt.mixin.MobAccessor;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -21,6 +22,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
@@ -133,18 +136,27 @@ public class Mod implements ModInitializer {
             }
         }
         if (enemy instanceof LivingEntity livingEnemy) {
+            // Show enemy name tag
+            enemy.setCustomNameVisible(true);
             // Make the follow range of the entity 160 so they can track from much farther
             Objects.requireNonNull(livingEnemy.getAttributes()
                     .getInstance(Attributes.FOLLOW_RANGE)).setBaseValue(160d);
+            // Add blockbreak goal to enemy
+            if (livingEnemy instanceof Mob mobEnemy) {
+                ((MobAccessor)mobEnemy).getTargetSelector().removeAllGoals();
+                ((MobAccessor)mobEnemy).getTargetSelector().addGoal(2, new NearestAttackableTargetGoal<>(mobEnemy, Player.class, false));
+                ((MobAccessor)mobEnemy).getGoalSelector().addGoal(1, new BreakBlockGoal(mobEnemy));
+                mobEnemy.setTarget(mobEnemy.level.getNearestPlayer(mobEnemy, 160));
+            }
             // Also exponentially scale health and damage
             double enemyBaseHealth = Objects.requireNonNull(livingEnemy.getAttributes()
                     .getInstance(Attributes.MAX_HEALTH)).getValue();
             Objects.requireNonNull(livingEnemy.getAttributes()
-                    .getInstance(Attributes.MAX_HEALTH)).setBaseValue(enemyBaseHealth * enemyHealthMultiplier);
+                    .getInstance(Attributes.MAX_HEALTH)).setBaseValue(Math.round(enemyBaseHealth * enemyHealthMultiplier));
             double enemyBaseDamage = Objects.requireNonNull(livingEnemy.getAttributes()
                     .getInstance(Attributes.ATTACK_DAMAGE)).getValue();
             Objects.requireNonNull(livingEnemy.getAttributes()
-                    .getInstance(Attributes.ATTACK_DAMAGE)).setBaseValue(enemyBaseDamage * enemyDamageMultiplier);
+                    .getInstance(Attributes.ATTACK_DAMAGE)).setBaseValue(Math.round(enemyBaseDamage * enemyDamageMultiplier * 10) / 10f);
             // Make sure new enemy is fully healed
             livingEnemy.setHealth(livingEnemy.getMaxHealth());
         }
