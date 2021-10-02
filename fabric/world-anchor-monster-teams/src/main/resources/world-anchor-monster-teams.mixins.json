@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "com.worldanchor.monsterteams.mixin",
   "compatibilityLevel": "JAVA_16",
-  "server": [
+  "mixins": [
     "AbstractHorseMixin",
     "CombatTrackerMixin",
     "EntityMixin",
@@ -29,6 +29,9 @@
     "VexEntityMixin",
     "VillagerMixin",
     "ZombieMixin"
+  ],
+  "server": [
+
   ],
   "injectors": {
     "defaultRequire": 1

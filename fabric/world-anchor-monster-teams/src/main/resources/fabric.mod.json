@@ -5,8 +5,11 @@
   "name": "World Anchor's Monster Teams",
   "description": "A server side mod that extends the functionality of the Minecraft teams system to be work with monsters!",
   "license": "All rights reserved",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
+    "main": [
+      "com.worldanchor.monsterteams.Mod"
+    ],
     "server": [
       "com.worldanchor.monsterteams.Server"
     ]

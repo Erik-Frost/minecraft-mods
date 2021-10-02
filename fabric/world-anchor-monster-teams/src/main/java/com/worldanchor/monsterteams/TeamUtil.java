@@ -1,11 +1,7 @@
 package com.worldanchor.monsterteams;
 
-import com.worldanchor.monsterteams.mixin.GoalSelectorAccessor;
-import com.worldanchor.monsterteams.mixin.MobAccessor;
-import com.worldanchor.monsterteams.mixin.NearestAttackableTargetGoalAccessor;
-import com.worldanchor.monsterteams.mixin.TargetingConditionsAccessor;
+import com.worldanchor.monsterteams.mixin.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerLevel;
@@ -13,21 +9,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BannerItem;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.Team;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -78,7 +69,7 @@ public class TeamUtil {
     public static void displayNameBasedOnGamerule(LivingEntity livingEntity) {
         // Turn on name tag if rule is set to
         livingEntity.setCustomNameVisible(
-                livingEntity.level.getGameRules().getBoolean(Server.DISPLAY_TEAM_NAME_TAGS));
+                livingEntity.level.getGameRules().getBoolean(Mod.DISPLAY_TEAM_NAME_TAGS));
 
     }
 
